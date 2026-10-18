@@ -4,7 +4,7 @@ export const officialDocuments = [
   {
     id: "folleto-santiago",
     title: "Guía de Uso Responsable del Primer Celular",
-    author: "Prof. Santiago Hernández",
+    author: "Prof. Esp. Santiago Hernández",
     entity: "Portal Uruguay Educa · DGES",
     fileUrl: `${base}documentos/Folleto-Celular-Santiago-Hernandez.pdf`,
     category: "Familias y Docentes",

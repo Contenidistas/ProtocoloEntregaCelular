@@ -33,7 +33,7 @@ Materiales sugeridos:
 - Acuerdo Familiar impreso para cada familia.
 - Proyector con el Modo Taller de esta plataforma (Atajo: Alt + T).
 - Canales de ayuda en Uruguay: Línea Azul INAU (0800 5050) y Delitos Informáticos (2030 4625).
-Autor de referencia: Prof. Santiago Hernández - Uruguay Educa DGES.`;
+Autor de referencia: Prof. Esp. Santiago Hernández - Uruguay Educa DGES (CVuy: https://exportcvuy.anii.org.uy/cv/?8242b38f35c3b4fc9b8d3442700f810e).`;
 
     navigator.clipboard.writeText(text);
     setCopiedWorkshop(true);
@@ -49,7 +49,7 @@ Objetivo: ${act.goal}
 PASO A PASO EN EL AULA:
 ${act.steps.map((s, idx) => `${idx + 1}. ${s}`).join('\n')}
 
-Recurso de la Plataforma Primer Celular Uruguay (Prof. Santiago Hernández - Uruguay Educa DGES).`;
+Recurso de la Plataforma Primer Celular Uruguay (Prof. Esp. Santiago Hernández - Uruguay Educa DGES).`;
 
     navigator.clipboard.writeText(text);
     setCopiedActivityId(act.id);

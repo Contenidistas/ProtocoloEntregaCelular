@@ -109,7 +109,7 @@ export default function DigitalHealthSection() {
       content: [
         {
           heading: "La mesa de las comidas: zona sagrada",
-          text: "Como destaca el Prof. Santiago Hernández en la guía de Uruguay Educa: jamás llevar dispositivos a la mesa durante el almuerzo o la cena. Es el espacio por excelencia para mirar a los ojos, contar el día y ejercitar la empatía."
+          text: "Como destaca el Prof. Esp. Santiago Hernández en la guía de Uruguay Educa: jamás llevar dispositivos a la mesa durante el almuerzo o la cena. Es el espacio por excelencia para mirar a los ojos, contar el día y ejercitar la empatía."
         },
         {
           heading: "El 'Modo No Molestar' compartido",

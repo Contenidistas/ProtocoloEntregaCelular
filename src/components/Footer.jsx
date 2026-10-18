@@ -1,5 +1,5 @@
 import React from 'react';
-import { Smartphone, ExternalLink, ArrowUp, Presentation } from 'lucide-react';
+import { Smartphone, ExternalLink, ArrowUp, Presentation, GraduationCap, Award } from 'lucide-react';
 
 export default function Footer({ setActiveTab, onOpenWorkshopMode }) {
   const scrollToTop = () => {
@@ -29,16 +29,48 @@ export default function Footer({ setActiveTab, onOpenWorkshopMode }) {
               Promoviendo la ciudadanía digital desde la familia y los centros educativos.
             </p>
 
-            <div className="p-3.5 rounded-xl bg-slate-800/80 border border-slate-700/80 text-xs space-y-1 text-slate-300">
-              <p>
-                <strong>Autoría pedagógica:</strong> Prof. Santiago Hernández
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-800/85 border border-slate-700/90 text-xs space-y-2.5 text-slate-300 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-4 h-4 text-indigo-400 shrink-0" />
+                  <p className="text-sm text-white">
+                    <strong>Autoría:</strong> Prof. Esp. Santiago Hernández
+                  </p>
+                </div>
+                <a
+                  href="https://exportcvuy.anii.org.uy/cv/?8242b38f35c3b4fc9b8d3442700f810e"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-indigo-200 font-bold text-[11px] transition-colors"
+                >
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Ver CVuy (ANII)</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+
+              <p className="text-slate-300 font-medium leading-relaxed">
+                Contenidista de informática en el portal Uruguay Educa, espacio Educación y TIC de la DGES (ANEP).
               </p>
-              <p className="text-slate-400">
-                Contenidista de informática en portal Uruguay Educa, espacio Educación y TIC de la DGES.
+
+              <p className="text-slate-400 leading-relaxed border-t border-slate-700/70 pt-2">
+                Santiago es candidato a Magíster en Educación por la Universidad ORT Uruguay, Doctorando en la Universidad Nacional de La Plata (UNLP, Argentina) e investigador en diversos equipos nacionales e internacionales. Sus líneas de investigación están relacionadas con las tecnologías emergentes, la inteligencia artificial y la educación.
               </p>
-              <p className="text-indigo-400 font-mono text-[11px]">
-                shernandez@uruguayeduca.edu.uy
-              </p>
+
+              <div className="pt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
+                <span className="text-indigo-400 font-mono">
+                  shernandez@uruguayeduca.edu.uy
+                </span>
+                <a
+                  href="https://exportcvuy.anii.org.uy/cv/?8242b38f35c3b4fc9b8d3442700f810e"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sky-400 hover:underline inline-flex items-center gap-1"
+                >
+                  <span>exportcvuy.anii.org.uy/cv</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
+              </div>
             </div>
           </div>
 

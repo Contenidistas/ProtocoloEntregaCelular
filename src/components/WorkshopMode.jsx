@@ -746,13 +746,24 @@ export default function WorkshopMode({ onExit }) {
 
               {/* Metaphor Block & Audience QR Code */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                <div className="md:col-span-7 bg-slate-900/90 border-2 border-indigo-500/40 rounded-3xl p-5 sm:p-6 shadow-xl">
+                <div className="md:col-span-7 bg-slate-900/90 border-2 border-indigo-500/40 rounded-3xl p-5 sm:p-6 shadow-xl space-y-2">
                   <p className="text-sm sm:text-base font-semibold text-slate-100 leading-snug italic">
                     "El celular no es un juguete ni un chupete electrónico; es una plaza pública global. No soltamos a un chiquilín solo de noche en una plaza sin enseñarle antes cómo cuidarse y cómo volver a casa."
                   </p>
-                  <span className="text-xs text-indigo-300 font-bold block mt-2">
-                    — Prof. Santiago Hernández (Contenidista de Informática, Uruguay Educa DGES)
-                  </span>
+                  <div className="pt-1 flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs text-indigo-300 font-bold block">
+                      — Prof. Esp. Santiago Hernández (Uruguay Educa DGES · Mag. (c) ORT · Doc. (c) UNLP)
+                    </span>
+                    <a
+                      href="https://exportcvuy.anii.org.uy/cv/?8242b38f35c3b4fc9b8d3442700f810e"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 hover:underline"
+                    >
+                      <span>CVuy (ANII)</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
 
                 <div className="md:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-4 flex items-center gap-4 shadow-xl">
@@ -1450,17 +1461,60 @@ export default function WorkshopMode({ onExit }) {
                 </div>
               </div>
 
-              {/* QR Code to Take Platform Home */}
-              <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md mx-auto space-y-3 shadow-2xl">
-                <div className="bg-white p-3 rounded-2xl w-fit mx-auto shadow-md">
-                  <QRCodeSVG value={currentUrl} size={128} />
+              {/* QR Code & Author Academic Bio Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 max-w-4xl mx-auto items-stretch">
+                <div className="md:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-5 flex flex-col items-center justify-center space-y-2.5 shadow-2xl">
+                  <div className="bg-white p-2.5 rounded-2xl w-fit mx-auto shadow-md">
+                    <QRCodeSVG value={currentUrl} size={112} />
+                  </div>
+                  <h4 className="font-heading font-bold text-sm sm:text-base text-white">
+                    Llevate la plataforma a tu casa
+                  </h4>
+                  <p className="text-xs text-slate-400">
+                    Escaneá el código para imprimir el pacto familiar o repasar los controles en familia.
+                  </p>
                 </div>
-                <h4 className="font-heading font-bold text-base text-white">
-                  Llevate la plataforma a tu casa
-                </h4>
-                <p className="text-xs text-slate-400">
-                  Escaneá el código para imprimir el pacto familiar o repasar los controles de Android e iPhone en familia.
-                </p>
+
+                <div className="md:col-span-7 bg-slate-900/95 border border-indigo-500/30 rounded-3xl p-5 sm:p-6 text-left flex flex-col justify-between space-y-3 shadow-2xl">
+                  <div className="space-y-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800">
+                        Autoría y coordinación académica
+                      </span>
+                      <a
+                        href="https://exportcvuy.anii.org.uy/cv/?8242b38f35c3b4fc9b8d3442700f810e"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/40 text-amber-300 text-[11px] font-bold transition-colors"
+                      >
+                        <span>Ver CVuy (ANII)</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                    <h4 className="font-heading font-extrabold text-base sm:text-lg text-white">
+                      Prof. Esp. Santiago Hernández
+                    </h4>
+                    <p className="text-xs text-indigo-300 font-semibold">
+                      Contenidista de Informática en Portal Uruguay Educa · Espacio Educación y TIC (DGES - ANEP)
+                    </p>
+                    <p className="text-xs text-slate-300 leading-relaxed pt-1">
+                      Santiago es candidato a Magíster en Educación por la Universidad ORT Uruguay, Doctorando en la Universidad Nacional de La Plata (UNLP, Argentina) e investigador en diversos equipos nacionales e internacionales. Sus líneas están relacionadas con las tecnologías emergentes, la inteligencia artificial y la educación.
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400">
+                    <span className="font-mono text-indigo-400">shernandez@uruguayeduca.edu.uy</span>
+                    <a
+                      href="https://exportcvuy.anii.org.uy/cv/?8242b38f35c3b4fc9b8d3442700f810e"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sky-400 hover:underline inline-flex items-center gap-1"
+                    >
+                      <span>exportcvuy.anii.org.uy/cv</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           )}

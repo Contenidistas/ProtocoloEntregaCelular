@@ -78,7 +78,7 @@ export const parentWorkshopAgenda = {
     {
       time: "06 - 12 min · Diapositiva 2",
       name: "Apertura: ¿Cómo construimos ciudadanía digital hoy?",
-      activity: "Metáfora de la plaza pública (Prof. Santiago Hernández): 'No soltamos a un hijo solo de noche en una plaza sin enseñarle antes a cuidarse'. Presentación de los 3 pilares (Derechos, Convivencia y Pensamiento Crítico) y escaneo del QR en sala."
+      activity: "Metáfora de la plaza pública (Prof. Esp. Santiago Hernández): 'No soltamos a un hijo solo de noche en una plaza sin enseñarle antes a cuidarse'. Presentación de los 3 pilares (Derechos, Convivencia y Pensamiento Crítico) y escaneo del QR en sala."
     },
     {
       time: "12 - 20 min · Diapositiva 3",

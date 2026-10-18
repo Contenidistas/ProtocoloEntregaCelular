@@ -96,7 +96,7 @@ export default function SercModelSection() {
             El modelo <span className="text-indigo-600">S.E.R.C.</span> en el hogar
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Del Dr. Ruben Puentedura y sistematizado por el Prof. Santiago Hernández (Uruguay Educa DGES): 
+            Del Dr. Ruben Puentedura y sistematizado por el <strong>Prof. Esp. Santiago Hernández</strong> (Uruguay Educa DGES): 
             cuatro pilares sencillos para acompañar a los chiquilines sin caer en la prohibición ni en el descuido.
           </p>
         </div>
@@ -245,7 +245,7 @@ export default function SercModelSection() {
             </div>
           </div>
 
-          {/* Golden Rule from Santiago Hernández */}
+          {/* Golden Rule from Prof. Esp. Santiago Hernández */}
           <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-amber-50/80 p-3.5 rounded-2xl border border-amber-200 text-amber-950">
             <div className="flex items-start gap-2.5">
               <AlertTriangle className="w-4 h-4 text-amber-800 shrink-0 mt-0.5" />
@@ -253,9 +253,15 @@ export default function SercModelSection() {
                 <strong className="font-bold">Regla de oro:</strong> "Tu ejemplo es su mejor lección. Si los adultos no soltamos el celular durante la cena o cuando nos hablan, ningún control parental va a funcionar."
               </p>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-white px-2 py-0.5 rounded-md border border-amber-200 shrink-0">
-              Prof. Santiago Hernández
-            </span>
+            <a
+              href="https://exportcvuy.anii.org.uy/cv/?8242b38f35c3b4fc9b8d3442700f810e"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] font-bold uppercase tracking-wider text-amber-900 hover:text-indigo-700 bg-white px-2.5 py-1 rounded-md border border-amber-200 shrink-0 transition-colors"
+              title="Ver CVuy (ANII) del Prof. Esp. Santiago Hernández"
+            >
+              Prof. Esp. Santiago Hernández · CVuy ↗
+            </a>
           </div>
 
         </div>

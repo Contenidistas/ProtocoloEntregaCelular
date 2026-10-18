@@ -158,7 +158,7 @@ export const caseStudies = [
         type: "danger",
         evaluation: "Incoherencia educativa absoluta.",
         feedback: "Le estás exigiendo a tu hijo que cuide su huella digital y respete a otros, mientras tú mismo vulneras su intimidad básica y no respetas su consentimiento.",
-        pedagogicalTip: "Recuerda el folleto del Prof. Santiago Hernández: 'Tu ejemplo es su mejor lección sobre el uso de la tecnología'."
+        pedagogicalTip: "Recuerda el folleto del Prof. Esp. Santiago Hernández: 'Tu ejemplo es su mejor lección sobre el uso de la tecnología'."
       },
       {
         id: "b",
