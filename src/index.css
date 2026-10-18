@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4, .font-heading {
+    font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+/* ==========================================================================
+   Smooth Keyframe Animations & Transitions (Spring / Cubic-Bezier Easing)
+   ========================================================================== */
+
+@keyframes fadeInSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.992);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideNextEnter {
+  0% {
+    opacity: 0;
+    transform: translateX(32px) scale(0.985);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes slidePrevEnter {
+  0% {
+    opacity: 0;
+    transform: translateX(-32px) scale(0.985);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes slideInRightDrawer {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomInSmooth {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes barGrowWidth {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/* Page & Tab Section Transitions */
+.page-transition-enter {
+  animation: fadeInSlideUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.tab-panel-transition {
+  animation: fadeInSlideUp 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* Workshop Projector Directional Slide Transitions */
+.slide-transition-next {
+  animation: slideNextEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity, filter;
+}
+
+.slide-transition-prev {
+  animation: slidePrevEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity, filter;
+}
+
+/* Staggered children entrance for grids */
+.stagger-grid > * {
+  opacity: 0;
+  animation: fadeInSlideUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.stagger-grid > *:nth-child(1) { animation-delay: 0.03s; }
+.stagger-grid > *:nth-child(2) { animation-delay: 0.07s; }
+.stagger-grid > *:nth-child(3) { animation-delay: 0.11s; }
+.stagger-grid > *:nth-child(4) { animation-delay: 0.15s; }
+.stagger-grid > *:nth-child(5) { animation-delay: 0.19s; }
+.stagger-grid > *:nth-child(6) { animation-delay: 0.23s; }
+.stagger-grid > *:nth-child(n+7) { animation-delay: 0.26s; }
+
+/* Animated Bar Charts */
+.bar-fill-animate {
+  transform-origin: left center;
+  animation: barGrowWidth 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Support existing animate-in classes across all components */
+.animate-in {
+  animation-duration: 0.38s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation-name: fadeInSlideUp;
+}
+
+.zoom-in-95 {
+  animation-name: zoomInSmooth;
+}
+
+.slide-in-from-right {
+  animation-name: slideInRightDrawer;
+}
+
+/* Smooth interactive button & card micro-interactions */
+button, a {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Print optimizations for the Family Agreement */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-contract {
+    border: 2px solid #1e293b !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    padding: 2.5rem !important;
+  }
+}

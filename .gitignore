@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+dist-ssr/
+*.local
+
+# Duplicate raw source files in root (clean copies live in public/documentos and public/videos)
+/*.mp4
+/*.pdf
+/*.zip
+/Morduchowicz*
+/Pantallas*
+
+# Videos > 50 MB in public/videos (hosted via GitHub Releases v1.0.0 & YouTube)
+public/videos/peligro-en-linea-cortometraje.mp4
+public/videos/peligro-redes-ninos-padres.mp4
+
+# Logs & OS files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+.env
+.env.*
