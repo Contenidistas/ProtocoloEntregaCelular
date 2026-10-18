@@ -56,16 +56,14 @@ export default function App() {
   // If workshop mode is active, render the presenter interface directly
   if (isWorkshopModeActive) {
     return (
-      <div className="animate-in zoom-in-95">
-        <WorkshopMode 
-          onExit={() => {
-            setIsWorkshopModeActive(false);
-            if (window.location.hash === '#taller') {
-              window.history.pushState(null, '', window.location.pathname);
-            }
-          }} 
-        />
-      </div>
+      <WorkshopMode 
+        onExit={() => {
+          setIsWorkshopModeActive(false);
+          if (window.location.hash === '#taller') {
+            window.history.pushState(null, '', window.location.pathname);
+          }
+        }} 
+      />
     );
   }
 
