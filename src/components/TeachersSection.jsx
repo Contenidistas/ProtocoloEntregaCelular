@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { teacherGuidelines, classroomActivities, parentWorkshopAgenda } from '../data/teacherResources';
+import ProtocolSection from './ProtocolSection';
 import { 
   GraduationCap, 
   Users, 
@@ -61,7 +62,7 @@ Recurso de la Plataforma Primer Celular Uruguay (Prof. Esp. Santiago Hernández 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto no-print">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-purple-100 text-purple-900 text-xs font-bold uppercase tracking-wider mb-3">
             <GraduationCap className="w-4 h-4 text-purple-700" />
             <span>Espacio para educadores y centros educativos</span>
@@ -71,12 +72,12 @@ Recurso de la Plataforma Primer Celular Uruguay (Prof. Esp. Santiago Hernández 
           </h2>
           <p className="mt-3 text-slate-600 text-sm sm:text-base">
             El aula y el patio son el termómetro donde repercuten los grupos de WhatsApp y las redes sociales. 
-            Aquí dispones de criterios institucionales, dinámicas de tutoría y un taller listo para proyectar en reuniones de familias.
+            Aquí dispones de criterios institucionales, dinámicas de tutoría, un contrato pedagógico de aula imprimible y un taller listo para proyectar en reuniones de familias.
           </p>
         </div>
 
         {/* 4 Institutional Guidelines Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
           {teacherGuidelines.map((guide, idx) => (
             <div 
               key={idx}
@@ -103,7 +104,7 @@ Recurso de la Plataforma Primer Celular Uruguay (Prof. Esp. Santiago Hernández 
         </div>
 
         {/* Classroom Ready-to-Use Activities */}
-        <div className="space-y-6">
+        <div className="space-y-6 no-print">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 flex items-center gap-1.5">
@@ -184,8 +185,13 @@ Recurso de la Plataforma Primer Celular Uruguay (Prof. Esp. Santiago Hernández 
           </div>
         </div>
 
+        {/* Interactive Classroom Pedagogical Contract Builder */}
+        <div className="pt-4 border-t border-slate-200">
+          <ProtocolSection initialMode="aula" />
+        </div>
+
         {/* Workshop Blueprint for Parent Meetings */}
-        <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl space-y-8">
+        <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl space-y-8 no-print">
           
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-800">
             <div>

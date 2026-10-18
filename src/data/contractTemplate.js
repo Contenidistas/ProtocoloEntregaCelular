@@ -11,7 +11,7 @@ export const defaultCommitmentsKid = [
   },
   {
     id: "k3",
-    text: "Respetaré las normas de mi centro educativo (liceo/escuela) y mantendré el celular guardado en silencio durante las clases.",
+    text: "Respetaré las normas de mi centro educativo (liceo/escuela/UTU) y mantendré el celular guardado en silencio durante las clases.",
     active: true
   },
   {
@@ -21,7 +21,7 @@ export const defaultCommitmentsKid = [
   },
   {
     id: "k5",
-    text: "Nunca compartiré fotos mías o ajenas íntimas, ni divulgaré datos personales (dirección de mi casa, colegio, ubicación en vivo) con desconocidos en internet.",
+    text: "Nunca compartiré fotos mías o ajenas íntimas, ni divulgaré datos personales (dirección de mi casa, centro educativo, ubicación en vivo) con desconocidos en internet.",
     active: true
   },
   {
@@ -73,4 +73,70 @@ export const defaultBreachClauses = [
   "Si se incumplen los horarios o reglas acordadas, el celular se guardará en un cajón durante 48 a 72 horas para recalibrar hábitos.",
   "El celular no es un derecho incondicional, sino una herramienta formativa de comunicación prestada por los adultos responsables para el crecimiento en ciudadanía digital.",
   "Este acuerdo se revisará conjuntamente cada 3 meses para ajustar permisos y horarios según la evolución y madurez demostrada."
+];
+
+export const defaultCommitmentsTeacher = [
+  {
+    id: "t1",
+    text: "Daré el ejemplo pedagógico en el aula: mantendré mi celular en silencio durante la clase y no atenderé mensajes ni llamadas personales salvo urgencia justificada.",
+    active: true
+  },
+  {
+    id: "t2",
+    text: "Indicaré con claridad al inicio de cada actividad cuándo trabajamos en modalidad 'Sin pantallas' y cuándo habilitamos el celular o equipo con un fin educativo concreto.",
+    active: true
+  },
+  {
+    id: "t3",
+    text: "Promoveré el uso reflexivo, crítico y ético de las tecnologías emergentes, buscadores e inteligencia artificial como apoyo al aprendizaje.",
+    active: true
+  },
+  {
+    id: "t4",
+    text: "Respetaré la privacidad y los datos personales de los/as estudiantes: jamás revisaré el contenido privado de un teléfono ni expondré a ningún estudiante frente a la clase.",
+    active: true
+  },
+  {
+    id: "t5",
+    text: "Escucharé con apertura y confidencialidad cualquier inquietud del grupo sobre convivencia en redes o malestar digital, articulando con adscripción o dirección cuando sea necesario.",
+    active: true
+  }
+];
+
+export const defaultCommitmentsStudents = [
+  {
+    id: "s1",
+    text: "Al ingresar al salón, pondremos el celular en silencio o 'No Molestar' y lo guardaremos en el lugar acordado hasta que el/la docente habilite su uso pedagógico.",
+    active: true
+  },
+  {
+    id: "s2",
+    text: "Nunca sacaremos fotos, audios ni videos de compañeros/as ni de docentes en el aula o recreo sin su permiso expreso (Ley N° 18.331 de Protección de Datos Personales).",
+    active: true
+  },
+  {
+    id: "s3",
+    text: "Cuidaremos el trato en los grupos de WhatsApp y redes de la clase: cero stickers humillantes, burlas, difusión de rumores o exclusión de compañeros/as.",
+    active: true
+  },
+  {
+    id: "s4",
+    text: "Usaremos internet y las herramientas de inteligencia artificial con honestidad académica, para investigar y comprender, sin copiar tareas sin reflexión.",
+    active: true
+  },
+  {
+    id: "s5",
+    text: "Respetaremos la palabra y la atención en clase: cuando el/la docente o un/a compañero/a expone, escucharemos activamente sin distracciones de pantalla.",
+    active: true
+  },
+  {
+    id: "s6",
+    text: "Si vemos que alguien del grupo sufre acoso digital o una situación de riesgo en redes, no seremos testigos silenciosos y pediremos ayuda a los adultos referentes del centro.",
+    active: true
+  }
+];
+
+export const defaultClassroomReviewClauses = [
+  "Ante el uso del celular sin habilitación pedagógica, se realizará primero un recordatorio verbal; de reiterarse, el dispositivo se resguardará de forma segura hasta el final de la hora según el reglamento del centro.",
+  "Este contrato pedagógico fue construido con participación del grupo y se revisará al promediar el semestre para evaluar cómo mejoró nuestra atención y convivencia."
 ];
