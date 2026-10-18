@@ -561,7 +561,7 @@ export default function WorkshopMode({ onExit }) {
                               onClick={resetCurrentAgeAnswers}
                               className="text-[11px] font-bold underline opacity-80 hover:opacity-100"
                             >
-                              Limpiar ({currentGroupAnsweredCount}/6)
+                              Limpiar ({currentGroupAnsweredCount}/{currentAgeGroup.questions.length})
                             </button>
                           )}
                         </div>
@@ -572,7 +572,7 @@ export default function WorkshopMode({ onExit }) {
                     </div>
                   </div>
 
-                  {/* 6 Neutral Questions Grid with Sí / No / A veces / No aplica */}
+                  {/* Neutral Questions Grid with Sí / No / A veces / No aplica */}
                   <div key={selectedAgeGroupId} className="grid grid-cols-1 md:grid-cols-2 gap-3.5 stagger-grid">
                     {currentAgeGroup.questions.map((q, idx) => {
                       const selectedAns = diagnosticAnswers[q.id];
@@ -588,7 +588,7 @@ export default function WorkshopMode({ onExit }) {
                           <div className="space-y-2">
                             <div className="flex items-center justify-between gap-2">
                               <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-800 text-indigo-300">
-                                Pregunta {idx + 1} de 6
+                                Pregunta {idx + 1} de {currentAgeGroup.questions.length}
                               </span>
                               <button
                                 onClick={() => goToSlide(q.targetSlideIndex)}
@@ -649,7 +649,7 @@ export default function WorkshopMode({ onExit }) {
                       <span className="text-[11px] font-extrabold uppercase tracking-wider text-indigo-400 block">
                         {currentGroupAnsweredCount === 0
                           ? 'Mapa de ruta del taller'
-                          : `Resumen del autodiagnóstico (${currentGroupAnsweredCount} de 6 respondidas)`}
+                          : `Resumen del autodiagnóstico (${currentGroupAnsweredCount} de ${currentAgeGroup.questions.length} respondidas)`}
                       </span>
                       {priorityQuestionsForWorkshop.length > 0 ? (
                         <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
@@ -1548,7 +1548,7 @@ export default function WorkshopMode({ onExit }) {
                 <p>• Preguntá a las familias qué edades tienen sus hijos y cambiá el selector de edad en vivo para mostrar las advertencias de cada etapa.</p>
                 <p>• Si hay niños pequeños (&lt; 9 años), remarcá la advertencia de que los smartphones y redes están pensados para mayores de 13 años.</p>
                 <p>• Si son mayores de edad (18+), destacá que ya no van controles técnicos, sino estar atentos a procesos de angustia, sueño y escucha.</p>
-                <p>• Leé las 6 preguntas y marcá con la sala <em>Sí / No / A veces / No aplica</em> para dejar trazada la hoja de ruta del taller.</p>
+                <p>• Leé las 10 preguntas y marcá con la sala <em>Sí / No / A veces / No aplica</em> para dejar trazada la hoja de ruta del taller.</p>
               </div>
             )}
 

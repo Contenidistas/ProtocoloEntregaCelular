@@ -235,7 +235,7 @@ export default function ReadinessQuiz({ onProceedToAgreement }) {
                       onClick={resetCurrentAgeAnswers}
                       className="text-xs font-bold underline opacity-75 hover:opacity-100"
                     >
-                      Reiniciar respuestas ({currentGroupAnsweredCount}/6)
+                      Reiniciar respuestas ({currentGroupAnsweredCount}/{currentAgeGroup.questions.length})
                     </button>
                   )}
                 </div>
@@ -245,7 +245,7 @@ export default function ReadinessQuiz({ onProceedToAgreement }) {
               </div>
             </div>
 
-            {/* 6 Questions Grid */}
+            {/* Questions Grid */}
             <div key={selectedAgeGroupId} className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-grid">
               {currentAgeGroup.questions.map((q, idx) => {
                 const selectedAns = diagnosticAnswers[q.id];
@@ -261,7 +261,7 @@ export default function ReadinessQuiz({ onProceedToAgreement }) {
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white border border-slate-200 text-indigo-700">
-                          Pregunta {idx + 1}
+                          Pregunta {idx + 1} de {currentAgeGroup.questions.length}
                         </span>
                         <span className="text-[10px] font-semibold text-slate-500">
                           Eje: {q.workshopTopic}
@@ -313,7 +313,7 @@ export default function ReadinessQuiz({ onProceedToAgreement }) {
             <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 block">
-                  Devolución orientadora ({currentGroupAnsweredCount} de 6 respondidas)
+                  Devolución orientadora ({currentGroupAnsweredCount} de {currentAgeGroup.questions.length} respondidas)
                 </span>
                 {priorityQuestions.length > 0 ? (
                   <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
