@@ -143,21 +143,29 @@ export default function HeroSection({ setActiveTab, userProfile, onOpenProfileSe
 
             </div>
 
-            {/* Optional Tools Clean Sub-Banner */}
-            <div className="p-3.5 rounded-2xl bg-slate-100/80 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-700">
-              <div className="flex items-center gap-2">
-                <span className="text-base shrink-0">✨</span>
+            {/* Optional Tools & Research Survey Clean Sub-Banner */}
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-100/90 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-700">
+              <div className="flex items-center gap-2.5">
+                <span className="text-base shrink-0">📊</span>
                 <span>
-                  <strong>¿Querés profundizar? (Opcional):</strong> Podés generar un <em>Acuerdo Familiar en PDF para imprimir</em> o hacer el <em>Test de Madurez</em>.
+                  <strong>Encuesta Familiar Anónima y Herramientas:</strong> Participá en el estudio sobre <em>percepciones familiares y primer celular</em> (con devolución inmediata) o creá tu <em>Acuerdo Familiar en PDF</em>.
                 </span>
               </div>
-              <button
-                onClick={() => { setActiveTab('opcionales'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                className="shrink-0 font-bold text-indigo-700 hover:text-indigo-900 underline flex items-center gap-1"
-              >
-                <span>Ver herramientas opcionales</span>
-                <span>→</span>
-              </button>
+              <div className="flex flex-wrap items-center gap-2 shrink-0">
+                <button
+                  onClick={() => { setActiveTab('encuesta'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors flex items-center gap-1 shadow-xs"
+                >
+                  <span>Responder encuesta (2 min)</span>
+                  <span>→</span>
+                </button>
+                <button
+                  onClick={() => { setActiveTab('opcionales'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="px-3 py-1.5 rounded-xl bg-white border border-slate-300 font-bold text-indigo-700 hover:bg-indigo-50 transition-colors"
+                >
+                  <span>Acuerdo PDF y Test</span>
+                </button>
+              </div>
             </div>
           </div>
         ) : (

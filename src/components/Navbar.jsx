@@ -24,7 +24,7 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
     { id: 'controles', label: 'Controles', icon: Smartphone },
     { id: 'videos', label: 'Videos', icon: Video },
     { id: 'formacion', label: 'Salud digital', icon: BookOpen },
-    { id: 'opcionales', label: 'Extras (opcional)', icon: Sparkles },
+    { id: 'encuesta', label: 'Encuesta y acuerdo', icon: Sparkles },
     { id: 'uruguay', label: 'Ayuda oficial', icon: Shield },
   ];
 
@@ -33,7 +33,7 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
     { id: 'docentes', label: 'En el aula', icon: GraduationCap },
     { id: 'documentos', label: 'Guías PDF', icon: FolderDown },
     { id: 'videos', label: 'Videos tutoría', icon: Video },
-    { id: 'opcionales', label: 'Acuerdo (PDF)', icon: FileText },
+    { id: 'encuesta', label: 'Encuesta y acuerdo', icon: FileText },
     { id: 'uruguay', label: 'Normativa', icon: Shield },
   ];
 
@@ -98,7 +98,9 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
           <nav className="hidden lg:flex items-center gap-1">
             {currentNav.map((item) => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
+              const isActive =
+                activeTab === item.id ||
+                (item.id === 'encuesta' && (activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test'));
               return (
                 <button
                   key={item.id}
@@ -157,7 +159,9 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
 
           {currentNav.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive =
+              activeTab === item.id ||
+              (item.id === 'encuesta' && (activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test'));
             return (
               <button
                 key={item.id}

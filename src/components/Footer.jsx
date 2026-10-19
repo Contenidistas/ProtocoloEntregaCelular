@@ -1,7 +1,7 @@
 import React from 'react';
-import { Smartphone, ExternalLink, ArrowUp, Presentation, GraduationCap, Award } from 'lucide-react';
+import { Smartphone, ExternalLink, ArrowUp, Presentation, GraduationCap, Award, Lock } from 'lucide-react';
 
-export default function Footer({ setActiveTab, onOpenWorkshopMode }) {
+export default function Footer({ setActiveTab, onOpenWorkshopMode, onOpenResearcherDashboard }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -106,6 +106,14 @@ export default function Footer({ setActiveTab, onOpenWorkshopMode }) {
               </li>
               <li>
                 <button 
+                  onClick={() => { setActiveTab('encuesta'); scrollToTop(); }}
+                  className="hover:text-white text-emerald-400 font-semibold transition-colors"
+                >
+                  Encuesta familiar anónima (Estudio)
+                </button>
+              </li>
+              <li>
+                <button 
                   onClick={() => { setActiveTab('opcionales'); scrollToTop(); }}
                   className="hover:text-white transition-colors"
                 >
@@ -205,7 +213,7 @@ export default function Footer({ setActiveTab, onOpenWorkshopMode }) {
 
         </div>
 
-        {/* Bottom Bar: License, Discreet Workshop Link & Back to Top */}
+        {/* Bottom Bar: License, Discreet Workshop & Researcher Links & Back to Top */}
         <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <div className="flex flex-wrap items-center gap-2 text-center sm:text-left">
             <span>Licencia abierta</span>
@@ -220,7 +228,19 @@ export default function Footer({ setActiveTab, onOpenWorkshopMode }) {
             <span>· Modelo S.E.R.C.: Dr. Ruben Puentedura</span>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Discreet Researcher Profile Link */}
+            {onOpenResearcherDashboard && (
+              <button
+                onClick={onOpenResearcherDashboard}
+                className="flex items-center gap-1.5 text-slate-500 hover:text-indigo-300 transition-colors text-xs"
+                title="Acceso con contraseña al panel de datos de investigación"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>Perfil investigador</span>
+              </button>
+            )}
+
             {/* Discreet Workshop Mode Link */}
             <button
               onClick={onOpenWorkshopMode}

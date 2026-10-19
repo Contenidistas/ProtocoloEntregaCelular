@@ -1,7 +1,7 @@
 import React from 'react';
-import { Users, GraduationCap, Sparkles, Check, ArrowRight, Presentation } from 'lucide-react';
+import { Users, GraduationCap, Sparkles, Check, ArrowRight, Presentation, Lock } from 'lucide-react';
 
-export default function ProfileSelectorModal({ userProfile, setUserProfile, isOpen, onClose, onOpenWorkshopMode }) {
+export default function ProfileSelectorModal({ userProfile, setUserProfile, isOpen, onClose, onOpenWorkshopMode, onOpenResearcherDashboard }) {
   if (!isOpen) return null;
 
   const handleSelect = (profile) => {
@@ -102,21 +102,37 @@ export default function ProfileSelectorModal({ userProfile, setUserProfile, isOp
 
         </div>
 
-        {/* Discreet Facilitator / Workshop Mode Link */}
-        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+        {/* Discreet Facilitator / Workshop & Researcher Mode Links */}
+        <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
           <span className="text-[11px]">Podés cambiar de perfil cuando quieras.</span>
           
-          <button
-            onClick={() => {
-              if (onClose) onClose();
-              if (onOpenWorkshopMode) onOpenWorkshopMode();
-            }}
-            className="inline-flex items-center gap-1 text-slate-400 hover:text-indigo-600 text-[11px] font-semibold transition-colors"
-            title="Vista diseñada para pantalla grande y proyector de eventos"
-          >
-            <Presentation className="w-3.5 h-3.5" />
-            <span>Modo taller (proyector)</span>
-          </button>
+          <div className="flex items-center gap-3">
+            {onOpenResearcherDashboard && (
+              <button
+                onClick={() => {
+                  if (onClose) onClose();
+                  onOpenResearcherDashboard();
+                }}
+                className="inline-flex items-center gap-1 text-slate-400 hover:text-indigo-600 text-[11px] font-semibold transition-colors"
+                title="Acceso protegido con contraseña al panel de investigación"
+              >
+                <Lock className="w-3 h-3" />
+                <span>Perfil investigador</span>
+              </button>
+            )}
+
+            <button
+              onClick={() => {
+                if (onClose) onClose();
+                if (onOpenWorkshopMode) onOpenWorkshopMode();
+              }}
+              className="inline-flex items-center gap-1 text-slate-400 hover:text-indigo-600 text-[11px] font-semibold transition-colors"
+              title="Vista diseñada para pantalla grande y proyector de eventos"
+            >
+              <Presentation className="w-3.5 h-3.5" />
+              <span>Modo taller</span>
+            </button>
+          </div>
         </div>
 
       </div>

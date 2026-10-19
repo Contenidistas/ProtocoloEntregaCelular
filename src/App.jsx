@@ -12,6 +12,7 @@ import DocumentsLibrarySection from './components/DocumentsLibrarySection';
 import UruguayNormativeSection from './components/UruguayNormativeSection';
 import TeachersSection from './components/TeachersSection';
 import WorkshopMode from './components/WorkshopMode';
+import ResearcherDashboardModal from './components/ResearcherDashboardModal';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -19,29 +20,43 @@ export default function App() {
   const [userProfile, setUserProfile] = useState('familia'); // 'familia' | 'docente'
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isWorkshopModeActive, setIsWorkshopModeActive] = useState(false);
+  const [isResearcherModalOpen, setIsResearcherModalOpen] = useState(false);
 
   // Load saved profile or trigger modal on first visit
   useEffect(() => {
+    const hash = window.location.hash || '';
+    const search = window.location.search || '';
+    const isDirectSurvey = hash.startsWith('#encuesta') || search.includes('taller=');
+    const isDirectResearch = hash === '#investigacion';
+
     const saved = localStorage.getItem('primer_celular_perfil');
     if (saved === 'familia' || saved === 'docente') {
       setUserProfile(saved);
-    } else {
+    } else if (!isDirectSurvey && !isDirectResearch) {
       setIsProfileModalOpen(true);
     }
 
-    // Check hash for #taller
-    if (window.location.hash === '#taller') {
+    if (hash === '#taller') {
       setIsWorkshopModeActive(true);
+    } else if (isDirectSurvey) {
+      setActiveTab('encuesta');
+    } else if (isDirectResearch) {
+      setIsResearcherModalOpen(true);
     }
   }, []);
 
-  // Keyboard shortcut to toggle workshop mode (Ctrl + Shift + P)
+  // Keyboard shortcuts:
+  // - Ctrl + Shift + P (or Alt + T): Toggle Workshop Mode
+  // - Ctrl + Shift + I: Toggle Researcher Dashboard Modal
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey && e.shiftKey && (e.key === 'P' || e.key === 'p')) || 
           (e.altKey && (e.key === 'T' || e.key === 't'))) {
         e.preventDefault();
         setIsWorkshopModeActive(prev => !prev);
+      } else if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
+        e.preventDefault();
+        setIsResearcherModalOpen(prev => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -77,6 +92,14 @@ export default function App() {
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
         onOpenWorkshopMode={() => setIsWorkshopModeActive(true)}
+        onOpenResearcherDashboard={() => setIsResearcherModalOpen(true)}
+      />
+
+      {/* Password-Protected Researcher Profile Modal */}
+      <ResearcherDashboardModal
+        isOpen={isResearcherModalOpen}
+        onClose={() => setIsResearcherModalOpen(false)}
+        onOpenSurvey={() => setActiveTab('encuesta')}
       />
 
       {/* Top sticky navigation */}
@@ -113,9 +136,19 @@ export default function App() {
             <DigitalHealthSection />
           )}
 
-          {/* Optional Tools: Agreement Generator & Readiness Test */}
-          {(activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test') && (
-            <OptionalToolsSection />
+          {/* Optional Tools & Anonymous Family Research Survey */}
+          {(activeTab === 'encuesta' || activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test') && (
+            <OptionalToolsSection
+              initialTool={
+                activeTab === 'encuesta'
+                  ? 'encuesta'
+                  : activeTab === 'test'
+                  ? 'test'
+                  : 'acuerdo-familiar'
+              }
+              onNavigateTab={setActiveTab}
+              onOpenResearcherDashboard={() => setIsResearcherModalOpen(true)}
+            />
           )}
 
           {activeTab === 'documentos' && (
@@ -143,6 +176,7 @@ export default function App() {
       <Footer 
         setActiveTab={setActiveTab} 
         onOpenWorkshopMode={() => setIsWorkshopModeActive(true)}
+        onOpenResearcherDashboard={() => setIsResearcherModalOpen(true)}
       />
 
     </div>

@@ -15,7 +15,7 @@ export default function BottomNavMobile({ activeTab, setActiveTab, userProfile }
     { id: 'inicio', label: 'Inicio', icon: Home },
     { id: 'controles', label: 'Configurar', icon: Smartphone },
     { id: 'videos', label: 'Videos', icon: Video },
-    { id: 'opcionales', label: 'Opcionales', icon: Sparkles },
+    { id: 'encuesta', label: 'Encuesta', icon: Sparkles },
     { id: 'uruguay', label: 'Ayuda', icon: PhoneCall },
   ];
 
@@ -24,7 +24,7 @@ export default function BottomNavMobile({ activeTab, setActiveTab, userProfile }
     { id: 'docentes', label: 'El Aula', icon: GraduationCap },
     { id: 'documentos', label: 'Guías PDF', icon: FolderDown },
     { id: 'videos', label: 'Videos', icon: Video },
-    { id: 'opcionales', label: 'Acuerdo', icon: FileText },
+    { id: 'encuesta', label: 'Encuesta', icon: FileText },
   ];
 
   const items = userProfile === 'docente' ? teacherNav : familyNav;
@@ -38,7 +38,9 @@ export default function BottomNavMobile({ activeTab, setActiveTab, userProfile }
     <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex items-center justify-around shadow-lg lg:hidden no-print">
       {items.map((item) => {
         const Icon = item.icon;
-        const isActive = activeTab === item.id;
+        const isActive =
+          activeTab === item.id ||
+          (item.id === 'encuesta' && (activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test'));
         return (
           <button
             key={item.id}
