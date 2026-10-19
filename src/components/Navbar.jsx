@@ -95,23 +95,38 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1.5">
             {currentNav.map((item) => {
               const Icon = item.icon;
+              const isSurveyItem = item.id === 'encuesta';
               const isActive =
                 activeTab === item.id ||
-                (item.id === 'encuesta' && (activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test'));
+                (isSurveyItem && (activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test'));
               return (
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    isActive
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-100'
+                  className={`flex items-center gap-1.5 rounded-xl font-bold transition-all ${
+                    isSurveyItem
+                      ? isActive
+                        ? 'px-4 py-2 text-xs sm:text-sm bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-300'
+                        : 'px-4 py-2 text-xs sm:text-sm bg-emerald-50 text-emerald-900 border border-emerald-300 hover:bg-emerald-100 shadow-xs'
+                      : isActive
+                        ? 'px-3 py-1.5 text-xs bg-slate-900 text-white shadow-xs'
+                        : 'px-3 py-1.5 text-xs text-slate-600 hover:text-indigo-600 hover:bg-slate-100'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                  <Icon
+                    className={`w-4 h-4 ${
+                      isSurveyItem
+                        ? isActive
+                          ? 'text-white'
+                          : 'text-emerald-600'
+                        : isActive
+                          ? 'text-white'
+                          : 'text-slate-400'
+                    }`}
+                  />
                   {item.label}
                 </button>
               );

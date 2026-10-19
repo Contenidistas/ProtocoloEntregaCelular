@@ -143,29 +143,21 @@ export default function HeroSection({ setActiveTab, userProfile, onOpenProfileSe
 
             </div>
 
-            {/* Optional Tools & Research Survey Clean Sub-Banner */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-100/90 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-700">
-              <div className="flex items-center gap-2.5">
-                <span className="text-base shrink-0">📊</span>
+            {/* Optional Tools Sub-Banner */}
+            <div className="p-3.5 rounded-2xl bg-slate-100/90 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-700">
+              <div className="flex items-center gap-2">
+                <span className="text-base shrink-0">✨</span>
                 <span>
-                  <strong>Encuesta Familiar Anónima y Herramientas:</strong> Participá en el estudio sobre <em>percepciones familiares y primer celular</em> (con devolución inmediata) o creá tu <em>Acuerdo Familiar en PDF</em>.
+                  <strong>Herramientas prácticas:</strong> También podés generar tu <em>Acuerdo Familiar en PDF para imprimir</em> o hacer el <em>Test de Madurez por Edad</em>.
                 </span>
               </div>
-              <div className="flex flex-wrap items-center gap-2 shrink-0">
-                <button
-                  onClick={() => { setActiveTab('encuesta'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors flex items-center gap-1 shadow-xs"
-                >
-                  <span>Responder encuesta (2 min)</span>
-                  <span>→</span>
-                </button>
-                <button
-                  onClick={() => { setActiveTab('opcionales'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="px-3 py-1.5 rounded-xl bg-white border border-slate-300 font-bold text-indigo-700 hover:bg-indigo-50 transition-colors"
-                >
-                  <span>Acuerdo PDF y Test</span>
-                </button>
-              </div>
+              <button
+                onClick={() => { setActiveTab('opcionales'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className="shrink-0 px-3.5 py-1.5 rounded-xl bg-white border border-slate-300 font-bold text-indigo-700 hover:bg-indigo-50 transition-colors flex items-center gap-1"
+              >
+                <span>Ir a Acuerdo PDF y Test</span>
+                <span>→</span>
+              </button>
             </div>
           </div>
         ) : (
@@ -216,6 +208,39 @@ export default function HeroSection({ setActiveTab, userProfile, onOpenProfileSe
             </div>
           </div>
         )}
+
+        {/* Prominent Featured Call-To-Action Card for the Anonymous Family Survey */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-900 via-teal-900 to-indigo-950 text-white p-5 sm:p-7 shadow-xl border-2 border-emerald-400/40">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+            <div className="space-y-2 max-w-xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-400/20 border border-emerald-300/40 text-emerald-200 text-[11px] sm:text-xs font-extrabold uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span>Estudio Académico Anónimo · Devolución Inmediata</span>
+              </div>
+              <h2 className="font-heading text-lg sm:text-2xl font-extrabold text-white leading-snug">
+                ¿Cómo usan el celular y las pantallas en casa? Sumá tu voz en 2 minutos
+              </h2>
+              <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+                Participá de forma <strong>100% anónima</strong> y recibí al instante una <strong>devolución personalizada basada en la evidencia oficial</strong> (Sociedad Uruguaya de Pediatría, OMS, MSP y AGESIC) sobre sueño, postura, visión y manejo de la frustración en juegos en línea.
+              </p>
+            </div>
+
+            <div className="w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => { setActiveTab('encuesta'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className="w-full lg:w-auto px-6 sm:px-8 py-4 rounded-2xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-heading font-extrabold text-sm sm:text-base shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+              >
+                <FileText className="w-5 h-5 text-slate-950 shrink-0" />
+                <span>Realizar Encuesta Familiar (2 min)</span>
+                <ArrowRight className="w-5 h-5 text-slate-950 shrink-0" />
+              </button>
+              <span className="text-[11px] text-emerald-200/80 text-center font-medium">
+                🔒 Anónimo (Ley N° 18.331) · Con sugerencias para tu hogar
+              </span>
+            </div>
+          </div>
+        </div>
 
       </div>
     </section>

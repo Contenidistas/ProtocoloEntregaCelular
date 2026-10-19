@@ -571,10 +571,10 @@ export default function FamilyResearchSurvey({
             <button
               type="button"
               onClick={() => setHasStarted(true)}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-bold text-sm shadow-sm hover:shadow transition-all"
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-heading font-extrabold text-base shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer"
             >
               <span>Comenzar encuesta (2 min)</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
 
