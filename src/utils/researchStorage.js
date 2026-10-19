@@ -68,7 +68,7 @@ export async function saveResearchRecord(answers, metadata = {}) {
     id: generateAnonymousId(),
     timestamp: new Date().toISOString(),
     consentAccepted: Boolean(metadata.consentAccepted),
-    consentVersion: '1.0-UY-18331',
+    consentVersion: '1.1-UY-18331',
     workshopCode: (metadata.workshopCode || config.activeWorkshopCode || 'WEB-PUBLICA').trim().toUpperCase(),
     readinessScore: metadata.readinessScore ?? null,
     ...answers
@@ -169,7 +169,7 @@ export function computeResearchAnalytics(records) {
     .filter(v => !isNaN(v));
   const certaintyScores = records.map(r => Number(r.certeza_supervision)).filter(v => !isNaN(v));
 
-  // Midpoint hours estimation
+  // Midpoint hours estimation (excluding "no_tengo_idea" where midpointHours is null)
   const qSemana = allQuestions.find(q => q.id === 'horas_semana');
   const qFinde = allQuestions.find(q => q.id === 'horas_fin_semana');
 
@@ -182,6 +182,11 @@ export function computeResearchAnalytics(records) {
     const opt = qFinde?.options?.find(o => o.value === r.horas_fin_semana);
     return opt?.midpointHours;
   }).filter(v => typeof v === 'number');
+
+  // Parents who admit not knowing screen time ("no_tengo_idea")
+  const unknownScreenTimeCount = records.filter(
+    r => r.horas_semana === 'no_tengo_idea' || r.horas_fin_semana === 'no_tengo_idea'
+  ).length;
 
   // Frequency distributions per question
   const frequencies = {};
@@ -285,6 +290,8 @@ export function computeResearchAnalytics(records) {
     certaintyStats: computeNumericStats(certaintyScores),
     weekdayHoursStats: computeNumericStats(weekdayHours),
     weekendHoursStats: computeNumericStats(weekendHours),
+    unknownScreenTimeCount,
+    unknownScreenTimePct: n > 0 ? Number(((unknownScreenTimeCount / n) * 100).toFixed(1)) : 0,
     sleepsInBedroomPct: n > 0 ? Number(((sleepsInBedroomCount / n) * 100).toFixed(1)) : 0,
     sleepsOutsidePct: n > 0 ? Number(((sleepsOutsideCount / n) * 100).toFixed(1)) : 0,
     activeParentalControlPct: n > 0 ? Number(((activeParentalControlCount / n) * 100).toFixed(1)) : 0,
@@ -305,7 +312,8 @@ export function exportResearchToCSV(records, useNumericCodes = false) {
     'FECHA_HORA_ISO',
     'CONSENTIMIENTO_LEY18331',
     'CODIGO_COHORTE_TALLER',
-    ...allQuestions.map(q => q.code)
+    ...allQuestions.map(q => q.code),
+    'DETALLES_OTROS_ESPECIFICADOS'
   ];
 
   const escapeCsv = (val) => {
@@ -339,12 +347,19 @@ export function exportResearchToCSV(records, useNumericCodes = false) {
       return rawVal;
     });
 
+    // Collect any custom "Otro" text specifications entered by the user
+    const otherDetails = Object.entries(r)
+      .filter(([k, v]) => k.endsWith('_otro_detalle') && v && String(v).trim().length > 0)
+      .map(([k, v]) => `${k.replace('_otro_detalle', '')}: ${String(v).trim()}`)
+      .join(' | ');
+
     return [
       escapeCsv(r.id),
       escapeCsv(r.timestamp),
       escapeCsv(r.consentAccepted ? 1 : 0),
       escapeCsv(r.workshopCode || 'WEB-PUBLICA'),
-      ...questionCells.map(escapeCsv)
+      ...questionCells.map(escapeCsv),
+      escapeCsv(otherDetails)
     ].join(',');
   });
 
@@ -359,6 +374,7 @@ export function generateAcademicCodebookMarkdown() {
     `**Estudio:** ${CONSENTIMIENTO_INFORMADO.subtitulo}`,
     `**Investigador Responsable:** ${CONSENTIMIENTO_INFORMADO.investigador} (${CONSENTIMIENTO_INFORMADO.contacto})`,
     `**Marco Legal y Ético:** ${CONSENTIMIENTO_INFORMADO.marcoLegal}`,
+    `**Respaldo Científico de Devolución:** ${CONSENTIMIENTO_INFORMADO.respaldoEvidencia}`,
     `**Diseño de Recolección:** Encuesta autoadministrada con consentimiento informado explícito (opt-in) y anonimización de origen (UUID sin PII ni IP).`,
     ``,
     `## Estructura de Variables para Análisis en SPSS / R / Jamovi / Python`,
@@ -383,69 +399,123 @@ export function generateAcademicCodebookMarkdown() {
   return lines.join('\n');
 }
 
-// Personalized feedback generator for families after completing the survey
+// Personalized feedback generator for families strictly grounded in official scientific evidence
 export function generateFamilyFeedback(answers) {
   const recommendations = [];
+  const impacts = Array.isArray(answers.impacto_fisico_emocional) ? answers.impacto_fisico_emocional : [];
+  const acts = Array.isArray(answers.actividades_percibidas) ? answers.actividades_percibidas : [];
 
-  // 1. Sleep & Bedroom feedback
-  if (answers.lugar_dormir_celular === 'dentro_cama' || answers.lugar_dormir_celular === 'dentro_apagado') {
+  // 1. Unknown Screen Time ("No tengo idea")
+  if (answers.horas_semana === 'no_tengo_idea' || answers.horas_fin_semana === 'no_tengo_idea' || acts.includes('no_estoy_seguro')) {
     recommendations.push({
-      category: 'Descanso nocturno y salud del sueño',
+      category: 'Monitoreo objetivo del tiempo en pantalla',
       level: 'prioritario',
-      title: 'Sacar las pantallas del dormitorio a la noche',
-      text: 'Indicaste que el dispositivo queda dentro del cuarto al dormir. La Sociedad Uruguaya de Pediatría (SUP) y la evidencia internacional muestran que tener el celular en el dormitorio reduce entre 45 y 60 minutos de sueño profundo (incluso apagado, por la "hipervigilancia" de notificaciones) y aumenta los conflictos diarios. Te sugerimos establecer una "estación de carga familiar" en el living o cocina 1 hora antes de dormir.',
+      title: 'Cómo pasar de la estimación a conocer el tiempo real de uso',
+      evidenciaOficial: 'Guías de Ciudadanía Digital AGESIC / Plan Ceibal y Sociedad Uruguaya de Pediatría (SUP)',
+      text: 'Indicaste que resulta difícil calcular cuánto tiempo pasa tu hijo/a frente a las pantallas o qué aplicaciones usa más. La evidencia muestra que las familias suelen subestimar hasta en un 50% el tiempo real de conexión. Tanto Android (Bienestar Digital / Family Link) como iPhone (Tiempo en Pantalla) incluyen un reporte diario automático que muestra exactamente cuántos minutos se usó cada juego o red social.',
+      actionTab: 'controles',
+      actionLabel: 'Ver cómo activar el reporte de tiempo en Android e iPhone'
+    });
+  }
+
+  // 2. Anger / Frustration in Online Games ("ira_frustracion_juegos")
+  if (
+    impacts.includes('ira_frustracion_juegos') ||
+    answers.frecuencia_conflictos === 'frecuente' ||
+    answers.frecuencia_conflictos === 'muy_frecuente' ||
+    answers.principal_preocupacion === 'ira_salud_postura'
+  ) {
+    recommendations.push({
+      category: 'Regulación emocional y manejo de la ira ante juegos en línea',
+      level: 'prioritario',
+      title: 'Por qué ocurren los estallidos de ira al perder o apagar el juego (y cómo prevenirlos)',
+      evidenciaOficial: 'Organización Mundial de la Salud (OMS - CIE-11) y Sociedad Uruguaya de Pediatría (SUP)',
+      text: 'Los videojuegos competitivos en línea liberan picos intensos de dopamina y adrenalina; como la corteza prefrontal (encargada de frenar los impulsos) sigue madurando hasta después de los 20 años, cortar una partida en seco o perder genera una frustración aguda similar a un síndrome de abstinencia breve. La evidencia clínica recomienda: (1) Avisar siempre 10 minutos antes de apagar ("última partida"), (2) No usar el celular como calmante emocional, y (3) Si hay gritos o agresividad, aplicar una pausa deportiva o física de 24 horas sobre ese juego específico.',
+      actionTab: 'formacion',
+      actionLabel: 'Ver guía de Salud Digital y regulación emocional'
+    });
+  }
+
+  // 3. Posture ("postura_cuello_espalda") & Vision ("fatiga_visual")
+  if (impacts.includes('postura_cuello_espalda') || impacts.includes('fatiga_visual')) {
+    recommendations.push({
+      category: 'Salud física: Postura cervical y protección de la visión',
+      level: 'prioritario',
+      title: 'Prevención del "Cuello de Texto" y fatiga visual (Regla 20-20-20)',
+      evidenciaOficial: 'Organización Mundial de la Salud (OMS), Academia Americana de Oftalmología (AAO) y MSP Uruguay',
+      text: 'Inclinar la cabeza 45° a 60° hacia abajo para mirar el celular multiplica el peso sobre la columna cervical hasta equivaler a 20–27 kg de presión, provocando contracturas y cambios posturales en edades de crecimiento. Asimismo, la fijación visual cercana continua acelera la miopía infantil. Las pautas médicas oficiales recomiendan: (1) Elevar la pantalla a la altura de los ojos o usar soporte en mesa (nunca acostado boca abajo), (2) Mantener al menos 35 cm de distancia de los ojos, (3) Aplicar la Regla 20-20-20 (cada 20 minutos, mirar a 6 metros de distancia durante 20 segundos) y (4) Garantizar al menos 1 a 2 horas diarias de luz natural al aire libre.',
+      actionTab: 'formacion',
+      actionLabel: 'Explorar pautas de Salud Digital y bienestar físico'
+    });
+  }
+
+  // 4. Social Isolation & Boredom Intolerance ("aislamiento_social" / "ansiedad_aburrimiento")
+  if (impacts.includes('aislamiento_social') || impacts.includes('ansiedad_aburrimiento') || answers.principal_preocupacion === 'aislamiento_estudio') {
+    recommendations.push({
+      category: 'Prevención del aislamiento y vínculo familiar',
+      level: 'prioritario',
+      title: 'Zonas libres de pantallas y recuperación del tiempo cara a cara',
+      evidenciaOficial: 'Sociedad Uruguaya de Pediatría (SUP), UNICEF (Kids Online Uruguay) y Modelo S.E.R.C.',
+      text: 'El aislamiento en el dormitorio con pantallas reduce el diálogo familiar y desplaza actividades protectoras de la salud mental (deporte, lectura, juego presencial con pares). La evidencia pediátrica sugiere acordar que el uso recreativo de pantallas ocurra preferentemente en espacios comunes de la casa y preservar momentos 100% libres de dispositivos, especialmente el almuerzo/cena familiar.',
       actionTab: 'inicio',
-      actionLabel: 'Ver regla S.E.R.C. de sueño'
+      actionLabel: 'Ver los 4 pilares del Modelo S.E.R.C. en casa'
+    });
+  }
+
+  // 5. Sleep & Bedroom feedback
+  if (answers.lugar_dormir_celular === 'dentro_cama' || answers.lugar_dormir_celular === 'dentro_apagado' || impacts.includes('cansancio_sueno')) {
+    recommendations.push({
+      category: 'Higiene del sueño y desarrollo neurocognitivo',
+      level: 'prioritario',
+      title: 'Sacar el celular del dormitorio durante la noche',
+      evidenciaOficial: 'Sociedad Uruguaya de Pediatría (SUP) y Academia Americana de Pediatría (AAP)',
+      text: 'La luz azul de la pantalla inhibe la secreción de melatonina (hormona del sueño) y, aun cuando el equipo queda en silencio dentro del cuarto, el estado de "alerta inconsciente" ante posibles mensajes fragmenta el sueño profundo y reduce entre 45 y 60 minutos el descanso reparador necesario para la memoria y el crecimiento. La pauta oficial recomienda apagar pantallas 60 minutos antes de dormir y cargar todos los celulares fuera de los dormitorios.',
+      actionTab: 'inicio',
+      actionLabel: 'Ver pauta S.E.R.C. de descanso nocturno'
     });
   } else if (answers.lugar_dormir_celular === 'fuera_cuarto') {
     recommendations.push({
-      category: 'Descanso nocturno y salud del sueño',
+      category: 'Higiene del sueño y desarrollo neurocognitivo',
       level: 'positivo',
-      title: '¡Excelente hábito de protección del sueño!',
-      text: 'Que el celular o pantalla cargue fuera del dormitorio durante la noche es el factor protector número 1 para cuidar el descanso, el estado de ánimo y el rendimiento escolar de tu hijo/a.'
+      title: '¡Hábito protector validado por la evidencia!',
+      evidenciaOficial: 'Sociedad Uruguaya de Pediatría (SUP) y Organización Mundial de la Salud (OMS)',
+      text: 'Que el celular o pantalla cargue fuera del dormitorio durante la noche coincide exactamente con la recomendación principal de las sociedades de pediatría para proteger el sueño profundo, el estado de ánimo y la atención escolar.'
     });
   }
 
-  // 2. Parental Control & Supervision gap
+  // 6. Parental Control & Supervision gap
   if (answers.uso_control_parental === 'no_desconoce' || answers.uso_control_parental === 'si_parcial') {
     recommendations.push({
-      category: 'Supervisión técnica acompañada',
+      category: 'Mediación técnica acompañada',
       level: 'prioritario',
-      title: 'Paso a paso para configurar Family Link o Tiempo en Pantalla',
-      text: 'Mencionaste que cuesta configurar o sostener los controles técnicos. Configurar el bloqueo automático nocturno y la aprobación de descargas lleva 10 minutos y evita tener que "pelear" todos los días para apagar la pantalla, porque el límite lo marca el reloj del sistema.',
+      title: 'Configuración de límites horarios y bloqueo nocturno automático',
+      evidenciaOficial: 'AGESIC (Ciudadanía Digital Uruguay) y Plan Ceibal',
+      text: 'Configurar el bloqueo nocturno automático y el límite de horas diarias en Google Family Link (Android) o Tiempo en Pantalla (iPhone) lleva menos de 10 minutos y disminuye drásticamente los conflictos diarios, ya que el corte del tiempo lo realiza el sistema de forma previsible y no depende de una discusión en el momento.',
       actionTab: 'controles',
-      actionLabel: 'Ir al tutorial paso a paso (Android / iPhone)'
-    });
-  } else if (answers.uso_control_parental === 'no_confianza') {
-    recommendations.push({
-      category: 'Equilibrio entre confianza y cuidado',
-      level: 'sugerencia',
-      title: 'Por qué combinar el diálogo con filtros técnicos',
-      text: 'El diálogo familiar es insustituible, pero los algoritmos de videos cortos y los chats en juegos online están diseñados para superar el autocontrol biológico de un niño o adolescente. Acompañar la confianza con límites horarios automáticos en el equipo disminuye el desgaste en casa.',
-      actionTab: 'controles',
-      actionLabel: 'Conocer cómo funcionan los controles'
+      actionLabel: 'Ir a la guía paso a paso de Controles Parentales'
     });
   }
 
-  // 3. Activities & Grooming / Social risks
-  const acts = Array.isArray(answers.actividades_percibidas) ? answers.actividades_percibidas : [];
+  // 7. Grooming / Online Games safety
   if (acts.includes('juegos_online') || answers.principal_preocupacion === 'grooming_desconocidos') {
     recommendations.push({
-      category: 'Seguridad en juegos en línea (Roblox, Minecraft, etc.)',
+      category: 'Prevención de riesgos relacionales (Grooming y chats abiertos)',
       level: 'prioritario',
-      title: 'Revisar los chats abiertos en videojuegos multijugador',
-      text: 'Los videojuegos en línea con chat abierto son hoy la principal vía de contacto con desconocidos en edades tempranas. Te recomendamos desactivar el chat con extraños dentro de la configuración de cada juego y mirar juntos los cortometrajes de prevención de la pestaña Videos.',
+      title: 'Configuración de privacidad en videojuegos en línea y redes',
+      evidenciaOficial: 'AGESIC, INAU (Línea Azul 0800 5050) y Ministerio del Interior',
+      text: 'De acuerdo con los reportes oficiales de seguridad digital en Uruguay, los chats abiertos dentro de videojuegos multijugador (como Roblox, Minecraft o Free Fire) son una de las vías más frecuentes de contacto por parte de desconocidos. Se recomienda configurar las cuentas en modo privado (solo amigos conocidos en la vida real) y dialogar en familia apoyándose en los videos educativos de esta plataforma.',
       actionTab: 'videos',
-      actionLabel: 'Ver videos para charlar en casa'
+      actionLabel: 'Ver cortometrajes de prevención para charlar en casa'
     });
   }
 
-  // 4. First phone age & Family Agreement
+  // 8. Family Agreement (Always included as actionable synthesis)
   recommendations.push({
-    category: 'Pacto de convivencia en el hogar',
+    category: 'Acuerdo de convivencia familiar basado en evidencia',
     level: 'sugerencia',
-    title: 'Plasmar las reglas por escrito en un Acuerdo Familiar',
-    text: `Para acompañar a tu hijo/a (${answers.edad_hijo || 10} años) sin discusiones diarias, te invitamos a generar e imprimir el Acuerdo Familiar personalizado con horarios, zonas libres de pantallas y compromisos mutuos.`,
+    title: 'Plasmar las pautas por escrito en un Acuerdo Familiar',
+    evidenciaOficial: 'Guías de Convivencia Digital ANEP / Uruguay Educa y Modelo S.E.R.C.',
+    text: `Los estudios sobre mediación parental demuestran que las reglas explícitas, acordadas por anticipado y firmadas en conjunto (incluyendo horarios, postura/descanso visual y trato respetuoso), generan mucha mayor adherencia que las órdenes improvisadas. Podés generar e imprimir ahora mismo el acuerdo adaptado para tu hijo/a (${answers.edad_hijo || 10} años).`,
     actionTab: 'acuerdo-familiar',
     actionLabel: 'Crear Acuerdo Familiar en PDF'
   });

@@ -15,15 +15,14 @@ import {
   CheckCircle2,
   AlertTriangle,
   Sparkles,
-  Info,
   ChevronDown,
   ChevronUp,
   RotateCcw,
-  BarChart3,
   Smartphone,
   Clock,
   HeartHandshake,
-  Tag
+  Tag,
+  BookOpenCheck
 } from 'lucide-react';
 
 const INITIAL_ANSWERS = {
@@ -44,6 +43,7 @@ const INITIAL_ANSWERS = {
   uso_control_parental: '',
   lugar_dormir_celular: '',
   frecuencia_conflictos: '',
+  impacto_fisico_emocional: [],
   principal_preocupacion: '',
   comentario_abierto: ''
 };
@@ -92,6 +92,10 @@ export default function FamilyResearchSurvey({
   const handleSingleChange = (questionId, value) => {
     setStepError('');
     setAnswers(prev => ({ ...prev, [questionId]: value }));
+  };
+
+  const handleOtherDetailChange = (questionId, text) => {
+    setAnswers(prev => ({ ...prev, [`${questionId}_otro_detalle`]: text }));
   };
 
   const handleMultipleToggle = (questionId, optionValue, maxSelections) => {
@@ -176,10 +180,15 @@ export default function FamilyResearchSurvey({
   };
 
   // ---------------------------------------------------------------------------
-  // VIEW 1: COMPLETED SURVEY + PERSONALIZED FAMILY FEEDBACK
+  // VIEW 1: COMPLETED SURVEY + OFFICIAL EVIDENCE-BASED FAMILY FEEDBACK
   // ---------------------------------------------------------------------------
   if (submittedRecord) {
     const feedbackItems = generateFamilyFeedback(answers);
+    const weekdayLabel =
+      SURVEY_BLOCKS[2].questions[0].options
+        .find(o => o.value === answers.horas_semana)
+        ?.label.replace(' por día', '') || '-';
+
     return (
       <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
         {/* Top Confirmation Banner */}
@@ -214,6 +223,21 @@ export default function FamilyResearchSurvey({
             </div>
           </div>
 
+          {/* Official Scientific Evidence Emphasis Banner */}
+          <div className="p-4 rounded-2xl bg-indigo-950 text-white border border-indigo-800 flex items-start gap-3.5 shadow-xs">
+            <div className="w-9 h-9 rounded-xl bg-indigo-800/80 text-indigo-200 flex items-center justify-center shrink-0 mt-0.5">
+              <BookOpenCheck className="w-5 h-5" />
+            </div>
+            <div className="space-y-1 text-xs leading-relaxed">
+              <span className="font-heading font-extrabold text-sm text-white block">
+                Devolución elaborada de acuerdo a la evidencia científica y pautas oficiales
+              </span>
+              <p className="text-indigo-100/90">
+                Todas las sugerencias que ves a continuación se generan en función de tus respuestas siguiendo los lineamientos oficiales de la <strong>Sociedad Uruguaya de Pediatría (SUP)</strong>, la <strong>Organización Mundial de la Salud (OMS)</strong>, el <strong>Ministerio de Salud Pública (MSP)</strong>, <strong>AGESIC</strong> y <strong>Plan Ceibal / ANEP</strong>.
+              </p>
+            </div>
+          </div>
+
           {/* Quick Snapshot of Family Profile */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
             <div>
@@ -230,8 +254,8 @@ export default function FamilyResearchSurvey({
             </div>
             <div>
               <span className="text-[11px] text-slate-500 block">Pantallas Lun a Vie</span>
-              <span className="font-heading font-extrabold text-base text-slate-900">
-                {SURVEY_BLOCKS[2].questions[0].options.find(o => o.value === answers.horas_semana)?.label.replace(' por día', '') || '-'}
+              <span className="font-heading font-extrabold text-xs sm:text-sm text-slate-900 line-clamp-2">
+                {weekdayLabel}
               </span>
             </div>
             <div>
@@ -246,7 +270,7 @@ export default function FamilyResearchSurvey({
           <div className="space-y-3 pt-2">
             <h4 className="font-heading font-extrabold text-base sm:text-lg text-slate-900 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-indigo-600" />
-              <span>Devolución personalizada para tu hogar</span>
+              <span>Sugerencias personalizadas basadas en evidencia para tu hogar</span>
             </h4>
 
             <div className="grid grid-cols-1 gap-3.5">
@@ -275,10 +299,10 @@ export default function FamilyResearchSurvey({
                       }`}
                     >
                       {item.level === 'prioritario'
-                        ? 'Atención sugerida'
+                        ? 'Atención sugerida por evidencia'
                         : item.level === 'positivo'
-                        ? 'Factor protector'
-                        : 'Recomendación'}
+                        ? 'Factor protector validado'
+                        : 'Sugerencia basada en evidencia'}
                     </span>
                   </div>
                   <h5 className="font-heading font-bold text-sm sm:text-base text-slate-900">
@@ -287,21 +311,26 @@ export default function FamilyResearchSurvey({
                   <p className="text-xs sm:text-sm text-slate-700 leading-relaxed mt-1">
                     {item.text}
                   </p>
-                  {item.actionTab && (
-                    <div className="mt-3">
-                      <button
-                        onClick={() => {
-                          if (item.actionTab === 'acuerdo-familiar' && onProceedToAgreement) {
-                            onProceedToAgreement();
-                          } else if (onNavigateTab) {
-                            onNavigateTab(item.actionTab);
-                          }
-                        }}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 hover:text-indigo-900 underline"
-                      >
-                        <span>{item.actionLabel}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                  {item.evidenciaOficial && (
+                    <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-[11px] text-slate-500">
+                        <strong>Fuente / Respaldo oficial:</strong> {item.evidenciaOficial}
+                      </span>
+                      {item.actionTab && (
+                        <button
+                          onClick={() => {
+                            if (item.actionTab === 'acuerdo-familiar' && onProceedToAgreement) {
+                              onProceedToAgreement();
+                            } else if (onNavigateTab) {
+                              onNavigateTab(item.actionTab);
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 hover:text-indigo-900 underline"
+                        >
+                          <span>{item.actionLabel}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -366,10 +395,10 @@ export default function FamilyResearchSurvey({
           {/* Main Heading */}
           <div className="space-y-2">
             <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Percepciones familiares sobre el primer celular y tiempo en pantalla
+              Percepciones familiares sobre el primer celular, tiempo en pantalla y salud
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Te invitamos a responder esta breve encuesta anónima (<strong>2 a 3 minutos</strong>). Al finalizar, recibirás una <strong>devolución personalizada para tu familia</strong> y, si estás de acuerdo, tus respuestas anónimas contribuirán a una investigación académica sobre ciudadanía y bienestar digital en Uruguay.
+              Te invitamos a responder esta breve encuesta anónima (<strong>2 a 3 minutos</strong>). Al finalizar, recibirás una <strong>devolución personalizada elaborada de acuerdo a la evidencia científica y pautas oficiales</strong> (Sociedad Uruguaya de Pediatría, OMS, MSP, AGESIC y ANEP) y, si estás de acuerdo, tus respuestas anónimas aportarán a una investigación sobre bienestar digital infantil y adolescente en Uruguay.
             </p>
           </div>
 
@@ -404,9 +433,9 @@ export default function FamilyResearchSurvey({
                 <HeartHandshake className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-heading font-bold text-xs text-slate-900">Sueño y acompañamiento</h4>
+                <h4 className="font-heading font-bold text-xs text-slate-900">Postura, visión, ira y sueño</h4>
                 <p className="text-[11px] text-slate-500 leading-snug mt-0.5">
-                  Uso de controles parentales, descanso nocturno y principales preocupaciones en casa.
+                  Efectos en la postura, vista, aislamiento, frustración en juegos en línea y descanso nocturno.
                 </p>
               </div>
             </div>
@@ -513,7 +542,7 @@ export default function FamilyResearchSurvey({
                     Solo quiero realizar el autodiagnóstico para ver mi devolución familiar (sin guardar datos en el estudio)
                   </span>
                   <span className="text-slate-500">
-                    Podés responder el cuestionario y recibir las recomendaciones en pantalla sin que tus respuestas se registren en la muestra académica.
+                    Podés responder el cuestionario y recibir las sugerencias basadas en evidencia oficial en pantalla sin que tus respuestas se registren en la muestra académica.
                   </span>
                 </div>
               </label>
@@ -582,6 +611,12 @@ export default function FamilyResearchSurvey({
         <div className="space-y-6 pt-2">
           {currentBlock.questions.map((q) => {
             const val = answers[q.id];
+            const selectedSingleOption = q.type === 'single' ? q.options?.find(o => o.value === val) : null;
+            const hasSelectedOtherMultiple =
+              q.type === 'multiple' &&
+              Array.isArray(val) &&
+              q.options?.some(o => o.allowOtherText && val.includes(o.value));
+            const showOtherInput = Boolean(selectedSingleOption?.allowOtherText || hasSelectedOtherMultiple);
 
             return (
               <div key={q.id} className="space-y-2.5 pb-5 border-b border-slate-100 last:border-b-0 last:pb-0">
@@ -681,6 +716,19 @@ export default function FamilyResearchSurvey({
                   </div>
                 )}
 
+                {/* Optional specification input when "Otro" is selected */}
+                {showOtherInput && (
+                  <div className="pt-1 animate-in fade-in duration-150">
+                    <input
+                      type="text"
+                      value={answers[`${q.id}_otro_detalle`] || ''}
+                      onChange={(e) => handleOtherDetailChange(q.id, e.target.value)}
+                      placeholder="Si querés, especificá cuál (opcional)..."
+                      className="w-full px-3.5 py-2 rounded-xl border border-indigo-200 bg-indigo-50/30 text-xs text-slate-800 focus:bg-white focus:border-indigo-600 focus:outline-none"
+                    />
+                  </div>
+                )}
+
                 {/* Likert 1-5 */}
                 {q.type === 'likert' && (
                   <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
@@ -755,7 +803,7 @@ export default function FamilyResearchSurvey({
                 ? 'Siguiente paso'
                 : isSubmitting
                 ? 'Procesando...'
-                : 'Finalizar y ver mi devolución'}
+                : 'Finalizar y ver devolución basada en evidencia'}
             </span>
             <ArrowRight className="w-4 h-4" />
           </button>

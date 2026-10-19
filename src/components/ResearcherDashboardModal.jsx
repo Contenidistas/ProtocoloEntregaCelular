@@ -186,9 +186,10 @@ export default function ResearcherDashboardModal({ isOpen, onClose, onOpenSurvey
     }
     const topMotive = [...(analytics.frequencies.motivo_principal_entrega || [])].sort((a, b) => b.count - a.count)[0];
     const topActivity = (analytics.frequencies.actividades_percibidas || [])[0];
+    const topImpact = (analytics.frequencies.impacto_fisico_emocional || [])[0];
     const topConcern = [...(analytics.frequencies.principal_preocupacion || [])].sort((a, b) => b.count - a.count)[0];
 
-    return `En una muestra de N = ${analytics.n} referentes familiares en Uruguay (edad media de los hijos/as M = ${analytics.childAgeStats.mean} años, DE = ${analytics.childAgeStats.sd}), la edad promedio reportada o proyectada para la entrega del primer smartphone propio fue de M = ${analytics.firstPhoneAgeStats.mean} años (DE = ${analytics.firstPhoneAgeStats.sd}; Mdn = ${analytics.firstPhoneAgeStats.median}). Entre quienes ya entregaron el dispositivo, la edad media de acceso fue de M = ${analytics.alreadyHasPhoneAgeStats.mean} años (DE = ${analytics.alreadyHasPhoneAgeStats.sd}), mientras que las familias en etapa previa planifican la entrega a una media de M = ${analytics.plannedPhoneAgeStats.mean} años. El motivo principal de entrega más frecuente fue "${topMotive?.label || '-'}" (${topMotive?.percentage || 0}%). Respecto a la percepción parental del tiempo en pantalla recreativo, se estimó un promedio de M = ${analytics.weekdayHoursStats.mean} horas diarias (DE = ${analytics.weekdayHoursStats.sd}) de lunes a viernes, ascendiendo a M = ${analytics.weekendHoursStats.mean} horas diarias (DE = ${analytics.weekendHoursStats.sd}) durante los fines de semana, destacándose como principal actividad percibida "${topActivity?.label || '-'}" (${topActivity?.percentage || 0}%). En cuanto a la mediación parental y hábitos del sueño, solo el ${analytics.activeParentalControlPct}% utiliza controles parentales técnicos de forma activa (con una certeza media de supervisión percibida de M = ${analytics.certaintyStats.mean} sobre 5, DE = ${analytics.certaintyStats.sd}), mientras que en el ${analytics.sleepsInBedroomPct}% de los hogares el dispositivo permanece dentro del dormitorio durante la noche. La principal preocupación expresada por las familias fue "${topConcern?.label || '-'}" (${topConcern?.percentage || 0}%).`;
+    return `En una muestra de N = ${analytics.n} referentes familiares en Uruguay (edad media de los hijos/as M = ${analytics.childAgeStats.mean} años, DE = ${analytics.childAgeStats.sd}), la edad promedio reportada o proyectada para la entrega del primer smartphone propio fue de M = ${analytics.firstPhoneAgeStats.mean} años (DE = ${analytics.firstPhoneAgeStats.sd}; Mdn = ${analytics.firstPhoneAgeStats.median}). Entre quienes ya entregaron el dispositivo, la edad media de acceso fue de M = ${analytics.alreadyHasPhoneAgeStats.mean} años (DE = ${analytics.alreadyHasPhoneAgeStats.sd}), mientras que las familias en etapa previa planifican la entrega a una media de M = ${analytics.plannedPhoneAgeStats.mean} años. El motivo principal de entrega más frecuente fue "${topMotive?.label || '-'}" (${topMotive?.percentage || 0}%). Respecto a la percepción parental del tiempo en pantalla recreativo, el ${analytics.unknownScreenTimePct}% de las familias manifestó desconocer la cantidad de horas de consumo; entre quienes lograron estimarlo, el promedio fue de M = ${analytics.weekdayHoursStats.mean} horas diarias (DE = ${analytics.weekdayHoursStats.sd}) de lunes a viernes y M = ${analytics.weekendHoursStats.mean} horas diarias (DE = ${analytics.weekendHoursStats.sd}) los fines de semana, destacándose como principal actividad percibida "${topActivity?.label || '-'}" (${topActivity?.percentage || 0}%). En relación con los efectos psicofísicos observados (postura, visión, aislamiento y manejo de la ira en juegos en línea), el síntoma más reportado fue "${topImpact?.label || '-'}" (${topImpact?.percentage || 0}%). Finalmente, solo el ${analytics.activeParentalControlPct}% utiliza controles parentales técnicos de forma activa (certeza media de supervisión M = ${analytics.certaintyStats.mean}/5, DE = ${analytics.certaintyStats.sd}), en el ${analytics.sleepsInBedroomPct}% de los hogares el dispositivo permanece dentro del dormitorio durante la noche, y la mayor preocupación familiar fue "${topConcern?.label || '-'}" (${topConcern?.percentage || 0}%).`;
   }, [analytics]);
 
   const handleCopyApa = () => {
@@ -208,7 +209,7 @@ function doPost(e) {
       "Edad_1er_Celular", "Edad_Internet", "Otros_Dispositivos", "Motivo_Entrega",
       "Horas_LunVie", "Horas_Finde", "Actividades_Percibidas", "Certeza_1a5",
       "Control_Parental", "Lugar_Dormir_Celular", "Frecuencia_Conflictos",
-      "Principal_Preocupacion", "Relato_Cualitativo"
+      "Impacto_Fisico_Emocional", "Principal_Preocupacion", "Relato_Cualitativo"
     ]);
   }
   sheet.appendRow([
@@ -218,7 +219,7 @@ function doPost(e) {
     data.motivo_principal_entrega, data.horas_semana, data.horas_fin_semana,
     (data.actividades_percibidas || []).join(";"), data.certeza_supervision,
     data.uso_control_parental, data.lugar_dormir_celular, data.frecuencia_conflictos,
-    data.principal_preocupacion, data.comentario_abierto || ""
+    (data.impacto_fisico_emocional || []).join(";"), data.principal_preocupacion, data.comentario_abierto || ""
   ]);
   return ContentService.createTextOutput(JSON.stringify({ status: "ok" })).setMimeType(ContentService.MimeType.JSON);
 }`;
@@ -475,7 +476,7 @@ function doPost(e) {
                         {analytics.weekdayHoursStats.mean}h <span className="text-slate-400 text-sm">/</span> {analytics.weekendHoursStats.mean}h
                       </div>
                       <span className="text-[11px] text-slate-500 block">
-                        Promedio diario percibido
+                        No tiene idea: <strong>{analytics.unknownScreenTimePct}%</strong> ({analytics.unknownScreenTimeCount})
                       </span>
                     </div>
 
@@ -660,6 +661,31 @@ function doPost(e) {
                             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-emerald-600 rounded-full"
+                                style={{ width: `${item.percentage}%` }}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Impacto físico y emocional observado (Postura, visión, ira en juegos, aislamiento) */}
+                    <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3 md:col-span-2">
+                      <h4 className="font-heading font-extrabold text-sm text-slate-900">
+                        Efectos físicos, posturales, visuales y manejo de la ira observados (Respuesta múltiple)
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
+                        {(analytics.frequencies.impacto_fisico_emocional || []).map((item) => (
+                          <div key={item.value} className="space-y-1">
+                            <div className="flex justify-between text-xs">
+                              <span className="text-slate-700 font-medium truncate pr-2">{item.label}</span>
+                              <span className="font-mono font-bold text-slate-900 shrink-0">
+                                {item.percentage}% ({item.count})
+                              </span>
+                            </div>
+                            <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-amber-500 rounded-full"
                                 style={{ width: `${item.percentage}%` }}
                               />
                             </div>
