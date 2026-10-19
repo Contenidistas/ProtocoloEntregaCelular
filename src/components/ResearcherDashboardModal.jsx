@@ -33,7 +33,6 @@ import {
   MessageSquareQuote,
   Cloud,
   Filter,
-  ShieldCheck,
   KeyRound
 } from 'lucide-react';
 
@@ -45,7 +44,7 @@ export default function ResearcherDashboardModal({ isOpen, onClose, onOpenSurvey
 
   const [records, setRecords] = useState([]);
   const [cohortFilter, setCohortFilter] = useState('ALL');
-  const [config, setConfig] = useState(getResearchConfig());
+  const [config, setConfig] = useState(() => getResearchConfig());
   const [newPassword, setNewPassword] = useState('');
   const [webhookInput, setWebhookInput] = useState('');
   const [workshopCodeInput, setWorkshopCodeInput] = useState('TALLER-FAMILIAS');
@@ -69,12 +68,26 @@ export default function ResearcherDashboardModal({ isOpen, onClose, onOpenSurvey
   }, [isOpen]);
 
   const filteredRecords = useMemo(() => {
+    if (!Array.isArray(records)) return [];
     if (cohortFilter === 'ALL') return records;
     return records.filter(r => (r.workshopCode || 'WEB-PUBLICA') === cohortFilter);
   }, [records, cohortFilter]);
 
   const analytics = useMemo(() => computeResearchAnalytics(filteredRecords), [filteredRecords]);
-  const allCohorts = useMemo(() => computeResearchAnalytics(records).cohorts, [records]);
+  const allCohorts = useMemo(() => computeResearchAnalytics(records).cohorts || [], [records]);
+
+  // Automatic APA 7 Draft Paragraph based on live data
+  const apaDraftText = useMemo(() => {
+    if (!analytics || analytics.n === 0) {
+      return 'Aún no hay registros en la muestra seleccionada para redactar el resumen estadístico. Podés cargar la muestra de prueba (N=8) con el botón superior para previsualizar este texto automático en formato APA 7.';
+    }
+    const topMotive = [...(analytics.frequencies?.motivo_principal_entrega || [])].sort((a, b) => b.count - a.count)[0];
+    const topActivity = (analytics.frequencies?.actividades_percibidas || [])[0];
+    const topImpact = (analytics.frequencies?.impacto_fisico_emocional || [])[0];
+    const topConcern = [...(analytics.frequencies?.principal_preocupacion || [])].sort((a, b) => b.count - a.count)[0];
+
+    return `En una muestra de N = ${analytics.n} referentes familiares en Uruguay (edad media de los hijos/as M = ${analytics.childAgeStats?.mean ?? 0} años, DE = ${analytics.childAgeStats?.sd ?? 0}), la edad promedio reportada o proyectada para la entrega del primer smartphone propio fue de M = ${analytics.firstPhoneAgeStats?.mean ?? 0} años (DE = ${analytics.firstPhoneAgeStats?.sd ?? 0}; Mdn = ${analytics.firstPhoneAgeStats?.median ?? 0}). Entre quienes ya entregaron el dispositivo, la edad media de acceso fue de M = ${analytics.alreadyHasPhoneAgeStats?.mean ?? 0} años (DE = ${analytics.alreadyHasPhoneAgeStats?.sd ?? 0}), mientras que las familias en etapa previa planifican la entrega a una media de M = ${analytics.plannedPhoneAgeStats?.mean ?? 0} años. El motivo principal de entrega más frecuente fue "${topMotive?.label || '-'}" (${topMotive?.percentage || 0}%). Respecto a la percepción parental del tiempo en pantalla recreativo, el ${analytics.unknownScreenTimePct ?? 0}% de las familias manifestó desconocer la cantidad de horas de consumo; entre quienes lograron estimarlo, el promedio fue de M = ${analytics.weekdayHoursStats?.mean ?? 0} horas diarias (DE = ${analytics.weekdayHoursStats?.sd ?? 0}) de lunes a viernes y M = ${analytics.weekendHoursStats?.mean ?? 0} horas diarias (DE = ${analytics.weekendHoursStats?.sd ?? 0}) los fines de semana, destacándose como principal actividad percibida "${topActivity?.label || '-'}" (${topActivity?.percentage || 0}%). En relación con los efectos psicofísicos observados (postura, visión, aislamiento y manejo de la ira en juegos en línea), el síntoma más reportado fue "${topImpact?.label || '-'}" (${topImpact?.percentage || 0}%). Finalmente, solo el ${analytics.activeParentalControlPct ?? 0}% utiliza controles parentales técnicos de forma activa (certeza media de supervisión M = ${analytics.certaintyStats?.mean ?? 0}/5, DE = ${analytics.certaintyStats?.sd ?? 0}), en el ${analytics.sleepsInBedroomPct ?? 0}% de los hogares el dispositivo permanece dentro del dormitorio durante la noche, y la mayor preocupación familiar fue "${topConcern?.label || '-'}" (${topConcern?.percentage || 0}%).`;
+  }, [analytics]);
 
   if (!isOpen) return null;
 
@@ -179,19 +192,6 @@ export default function ResearcherDashboardModal({ isOpen, onClose, onOpenSurvey
     showTempBanner('Configuración de investigador guardada correctamente.');
   };
 
-  // Automatic APA 7 Draft Paragraph based on live data
-  const apaDraftText = useMemo(() => {
-    if (analytics.n === 0) {
-      return 'Aún no hay registros en la muestra seleccionada para redactar el resumen estadístico.';
-    }
-    const topMotive = [...(analytics.frequencies.motivo_principal_entrega || [])].sort((a, b) => b.count - a.count)[0];
-    const topActivity = (analytics.frequencies.actividades_percibidas || [])[0];
-    const topImpact = (analytics.frequencies.impacto_fisico_emocional || [])[0];
-    const topConcern = [...(analytics.frequencies.principal_preocupacion || [])].sort((a, b) => b.count - a.count)[0];
-
-    return `En una muestra de N = ${analytics.n} referentes familiares en Uruguay (edad media de los hijos/as M = ${analytics.childAgeStats.mean} años, DE = ${analytics.childAgeStats.sd}), la edad promedio reportada o proyectada para la entrega del primer smartphone propio fue de M = ${analytics.firstPhoneAgeStats.mean} años (DE = ${analytics.firstPhoneAgeStats.sd}; Mdn = ${analytics.firstPhoneAgeStats.median}). Entre quienes ya entregaron el dispositivo, la edad media de acceso fue de M = ${analytics.alreadyHasPhoneAgeStats.mean} años (DE = ${analytics.alreadyHasPhoneAgeStats.sd}), mientras que las familias en etapa previa planifican la entrega a una media de M = ${analytics.plannedPhoneAgeStats.mean} años. El motivo principal de entrega más frecuente fue "${topMotive?.label || '-'}" (${topMotive?.percentage || 0}%). Respecto a la percepción parental del tiempo en pantalla recreativo, el ${analytics.unknownScreenTimePct}% de las familias manifestó desconocer la cantidad de horas de consumo; entre quienes lograron estimarlo, el promedio fue de M = ${analytics.weekdayHoursStats.mean} horas diarias (DE = ${analytics.weekdayHoursStats.sd}) de lunes a viernes y M = ${analytics.weekendHoursStats.mean} horas diarias (DE = ${analytics.weekendHoursStats.sd}) los fines de semana, destacándose como principal actividad percibida "${topActivity?.label || '-'}" (${topActivity?.percentage || 0}%). En relación con los efectos psicofísicos observados (postura, visión, aislamiento y manejo de la ira en juegos en línea), el síntoma más reportado fue "${topImpact?.label || '-'}" (${topImpact?.percentage || 0}%). Finalmente, solo el ${analytics.activeParentalControlPct}% utiliza controles parentales técnicos de forma activa (certeza media de supervisión M = ${analytics.certaintyStats.mean}/5, DE = ${analytics.certaintyStats.sd}), en el ${analytics.sleepsInBedroomPct}% de los hogares el dispositivo permanece dentro del dormitorio durante la noche, y la mayor preocupación familiar fue "${topConcern?.label || '-'}" (${topConcern?.percentage || 0}%).`;
-  }, [analytics]);
-
   const handleCopyApa = () => {
     navigator.clipboard.writeText(apaDraftText);
     setCopiedApa(true);
@@ -224,21 +224,22 @@ function doPost(e) {
   return ContentService.createTextOutput(JSON.stringify({ status: "ok" })).setMimeType(ContentService.MimeType.JSON);
 }`;
 
-  const surveyShareUrl = `${window.location.origin}${window.location.pathname}?taller=${encodeURIComponent(workshopCodeInput.trim().toUpperCase() || 'TALLER')}#encuesta`;
+  const originUrl = typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}` : '';
+  const surveyShareUrl = `${originUrl}?taller=${encodeURIComponent(workshopCodeInput.trim().toUpperCase() || 'TALLER')}#encuesta`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white rounded-3xl max-w-6xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto">
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm overflow-y-auto p-2 sm:p-6">
+      <div className="bg-white text-slate-800 rounded-3xl max-w-6xl w-full mx-auto my-2 sm:my-6 shadow-2xl border border-slate-200 overflow-hidden">
         
-        {/* Top Modal Header */}
-        <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0">
+        {/* Top Modal Header (Sticky inside scroll) */}
+        <div className="px-5 sm:px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
+            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shrink-0">
               {isAuthenticated ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-heading font-extrabold text-base sm:text-lg">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="font-heading font-extrabold text-sm sm:text-lg text-white">
                   Perfil de Investigador · Base de Datos Anónima
                 </h3>
                 <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-[10px] font-bold uppercase tracking-wider">
@@ -252,8 +253,9 @@ function doPost(e) {
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors shrink-0"
             aria-label="Cerrar panel de investigador"
           >
             <X className="w-5 h-5" />
@@ -264,7 +266,7 @@ function doPost(e) {
         {/* PASSWORD LOGIN GATE                                                 */}
         {/* ------------------------------------------------------------------- */}
         {!isAuthenticated ? (
-          <div className="p-8 sm:p-12 max-w-md mx-auto w-full space-y-6 text-center my-auto">
+          <div className="p-6 sm:p-12 max-w-md mx-auto w-full space-y-6 text-center bg-white">
             <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mx-auto">
               <KeyRound className="w-7 h-7" />
             </div>
@@ -288,10 +290,10 @@ function doPost(e) {
                   onChange={(e) => setPasswordInput(e.target.value)}
                   placeholder="Ingresá la contraseña..."
                   autoFocus
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:border-indigo-600 focus:outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-900 bg-white focus:border-indigo-600 focus:outline-none"
                 />
-                <p className="text-[11px] text-slate-400 mt-1.5">
-                  Clave inicial por defecto: <code className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono">investiga2026</code> (podés cambiarla dentro del panel).
+                <p className="text-[11px] text-slate-500 mt-1.5">
+                  Clave inicial por defecto: <code className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-mono font-bold">investiga2026</code> (podés cambiarla dentro del panel).
                 </p>
               </div>
 
@@ -312,18 +314,19 @@ function doPost(e) {
           </div>
         ) : (
           /* ------------------------------------------------------------------- */
-          /* AUTHENTICATED RESEARCHER DASHBOARD                                  */
+          /* AUTHENTICATED RESEARCHER DASHBOARD (Natural block flow, no collapse)*/
           /* ------------------------------------------------------------------- */
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="bg-white text-slate-800">
             
             {/* Sub-navigation bar & Cohort filter */}
-            <div className="px-6 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+            <div className="px-4 sm:px-6 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-1.5">
                 <button
+                  type="button"
                   onClick={() => setActiveSubTab('analytics')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     activeSubTab === 'analytics'
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-indigo-600 text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-200/70'
                   }`}
                 >
@@ -332,10 +335,11 @@ function doPost(e) {
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => setActiveSubTab('records')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     activeSubTab === 'records'
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-indigo-600 text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-200/70'
                   }`}
                 >
@@ -344,10 +348,11 @@ function doPost(e) {
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => setActiveSubTab('qr_workshop')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     activeSubTab === 'qr_workshop'
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-indigo-600 text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-200/70'
                   }`}
                 >
@@ -356,10 +361,11 @@ function doPost(e) {
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => setActiveSubTab('export_cloud')}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                     activeSubTab === 'export_cloud'
-                      ? 'bg-indigo-600 text-white shadow-xs'
+                      ? 'bg-indigo-600 text-white shadow-sm'
                       : 'text-slate-600 hover:bg-slate-200/70'
                   }`}
                 >
@@ -388,6 +394,7 @@ function doPost(e) {
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => handleDownloadCSV(false)}
                   disabled={filteredRecords.length === 0}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white text-xs font-bold transition-colors"
@@ -399,36 +406,40 @@ function doPost(e) {
             </div>
 
             {statusBanner && (
-              <div className="px-6 py-2 bg-emerald-50 border-b border-emerald-200 text-emerald-900 text-xs font-bold flex items-center justify-between">
+              <div className="px-6 py-2.5 bg-emerald-50 border-b border-emerald-200 text-emerald-900 text-xs font-bold flex items-center justify-between">
                 <span>✓ {statusBanner}</span>
-                <button onClick={() => setStatusBanner('')} className="text-emerald-700 underline">cerrar</button>
+                <button type="button" onClick={() => setStatusBanner('')} className="text-emerald-700 underline">
+                  cerrar
+                </button>
               </div>
             )}
 
-            {/* Main Scrollable Content Area */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            {/* Main Content Body */}
+            <div className="p-4 sm:p-6 space-y-6">
               
               {/* Empty State Helper if 0 records */}
               {records.length === 0 && (
-                <div className="p-6 rounded-2xl bg-indigo-50/70 border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="p-5 sm:p-6 rounded-2xl bg-indigo-50 border border-indigo-200 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="space-y-1">
                     <h4 className="font-heading font-extrabold text-base text-slate-900">
                       La base de datos está lista para recibir respuestas
                     </h4>
                     <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
-                      Todavía no hay encuestas registradas en este navegador. Podés cargar una <strong>muestra simulada de Uruguay (N = 8)</strong> para explorar las tablas de contingencia, el redactor APA y probar la exportación a Excel/SPSS, o ir directamente al formulario.
+                      Todavía no hay encuestas guardadas en este navegador. Podés cargar una <strong>muestra simulada de Uruguay (N = 8)</strong> con un clic para explorar las tablas de contingencia, los gráficos, el redactor APA y probar la exportación a Excel/SPSS.
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 shrink-0">
                     <button
+                      type="button"
                       onClick={handleLoadSample}
-                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition-all"
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition-all"
                     >
                       <Sparkles className="w-4 h-4" />
                       <span>Cargar muestra de prueba (N=8)</span>
                     </button>
                     {onOpenSurvey && (
                       <button
+                        type="button"
                         onClick={() => {
                           onClose();
                           onOpenSurvey();
@@ -463,40 +474,40 @@ function doPost(e) {
                     <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-1">
                       <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider">Edad 1er Celular</span>
                       <div className="text-xl sm:text-2xl font-heading font-extrabold text-indigo-700">
-                        {analytics.firstPhoneAgeStats.mean} años
+                        {analytics.firstPhoneAgeStats?.mean ?? 0} años
                       </div>
                       <span className="text-[11px] text-slate-500 block">
-                        DE = {analytics.firstPhoneAgeStats.sd} · Mediana = {analytics.firstPhoneAgeStats.median}
+                        DE = {analytics.firstPhoneAgeStats?.sd ?? 0} · Mediana = {analytics.firstPhoneAgeStats?.median ?? 0}
                       </span>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-1">
                       <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider">Pantalla Lun-Vie vs Finde</span>
                       <div className="text-xl sm:text-2xl font-heading font-extrabold text-slate-900">
-                        {analytics.weekdayHoursStats.mean}h <span className="text-slate-400 text-sm">/</span> {analytics.weekendHoursStats.mean}h
+                        {analytics.weekdayHoursStats?.mean ?? 0}h <span className="text-slate-400 text-sm">/</span> {analytics.weekendHoursStats?.mean ?? 0}h
                       </div>
                       <span className="text-[11px] text-slate-500 block">
-                        No tiene idea: <strong>{analytics.unknownScreenTimePct}%</strong> ({analytics.unknownScreenTimeCount})
+                        No tiene idea: <strong>{analytics.unknownScreenTimePct ?? 0}%</strong> ({analytics.unknownScreenTimeCount ?? 0})
                       </span>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-1">
                       <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider">Duerme en el Cuarto</span>
                       <div className="text-xl sm:text-2xl font-heading font-extrabold text-amber-600">
-                        {analytics.sleepsInBedroomPct}%
+                        {analytics.sleepsInBedroomPct ?? 0}%
                       </div>
                       <span className="text-[11px] text-slate-500 block">
-                        Fuera del cuarto: {analytics.sleepsOutsidePct}%
+                        Fuera del cuarto: {analytics.sleepsOutsidePct ?? 0}%
                       </span>
                     </div>
 
                     <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-1">
                       <span className="text-[11px] text-slate-500 uppercase font-bold tracking-wider">Control Parental Activo</span>
                       <div className="text-xl sm:text-2xl font-heading font-extrabold text-emerald-700">
-                        {analytics.activeParentalControlPct}%
+                        {analytics.activeParentalControlPct ?? 0}%
                       </div>
                       <span className="text-[11px] text-slate-500 block">
-                        No sabe configurarlo: {analytics.doesntKnowControlPct}%
+                        No sabe configurarlo: {analytics.doesntKnowControlPct ?? 0}%
                       </span>
                     </div>
                   </div>
@@ -512,21 +523,21 @@ function doPost(e) {
                       </p>
                       <div className="grid grid-cols-2 gap-3 pt-1">
                         <div className="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-100">
-                          <span className="text-[11px] font-bold text-indigo-800 uppercase">Ya tienen celular (n={analytics.alreadyHasPhoneAgeStats.count})</span>
+                          <span className="text-[11px] font-bold text-indigo-800 uppercase">Ya tienen celular (n={analytics.alreadyHasPhoneAgeStats?.count ?? 0})</span>
                           <div className="text-xl font-heading font-extrabold text-indigo-950 mt-1">
-                            M = {analytics.alreadyHasPhoneAgeStats.mean} años
+                            M = {analytics.alreadyHasPhoneAgeStats?.mean ?? 0} años
                           </div>
                           <span className="text-[11px] text-indigo-700">
-                            DE = {analytics.alreadyHasPhoneAgeStats.sd} (Rango {analytics.alreadyHasPhoneAgeStats.min}–{analytics.alreadyHasPhoneAgeStats.max})
+                            DE = {analytics.alreadyHasPhoneAgeStats?.sd ?? 0} (Rango {analytics.alreadyHasPhoneAgeStats?.min ?? 0}–{analytics.alreadyHasPhoneAgeStats?.max ?? 0})
                           </span>
                         </div>
                         <div className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-100">
-                          <span className="text-[11px] font-bold text-emerald-800 uppercase">Aún sin celular (n={analytics.plannedPhoneAgeStats.count})</span>
+                          <span className="text-[11px] font-bold text-emerald-800 uppercase">Aún sin celular (n={analytics.plannedPhoneAgeStats?.count ?? 0})</span>
                           <div className="text-xl font-heading font-extrabold text-emerald-950 mt-1">
-                            M = {analytics.plannedPhoneAgeStats.mean} años
+                            M = {analytics.plannedPhoneAgeStats?.mean ?? 0} años
                           </div>
                           <span className="text-[11px] text-emerald-700">
-                            DE = {analytics.plannedPhoneAgeStats.sd} (Rango {analytics.plannedPhoneAgeStats.min}–{analytics.plannedPhoneAgeStats.max})
+                            DE = {analytics.plannedPhoneAgeStats?.sd ?? 0} (Rango {analytics.plannedPhoneAgeStats?.min ?? 0}–{analytics.plannedPhoneAgeStats?.max ?? 0})
                           </span>
                         </div>
                       </div>
@@ -548,7 +559,7 @@ function doPost(e) {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100">
-                            {analytics.sleepVsConflictTable.map((row, i) => (
+                            {(analytics.sleepVsConflictTable || []).map((row, i) => (
                               <tr key={i}>
                                 <td className="py-2 pr-2 font-medium text-slate-800">{row.category}</td>
                                 <td className="py-2 px-2 text-center font-mono text-slate-500">{row.total}</td>
@@ -575,7 +586,7 @@ function doPost(e) {
                         Motivo principal de entrega del primer celular
                       </h4>
                       <div className="space-y-2.5">
-                        {(analytics.frequencies.motivo_principal_entrega || []).map((item) => (
+                        {(analytics.frequencies?.motivo_principal_entrega || []).map((item) => (
                           <div key={item.value} className="space-y-1">
                             <div className="flex justify-between text-xs">
                               <span className="text-slate-700 font-medium truncate pr-2">{item.label}</span>
@@ -600,7 +611,7 @@ function doPost(e) {
                         Actividades percibidas por los padres (Respuesta múltiple)
                       </h4>
                       <div className="space-y-2.5">
-                        {(analytics.frequencies.actividades_percibidas || []).map((item) => (
+                        {(analytics.frequencies?.actividades_percibidas || []).map((item) => (
                           <div key={item.value} className="space-y-1">
                             <div className="flex justify-between text-xs">
                               <span className="text-slate-700 font-medium truncate pr-2">{item.label}</span>
@@ -625,7 +636,7 @@ function doPost(e) {
                         Principal preocupación de las familias
                       </h4>
                       <div className="space-y-2.5">
-                        {(analytics.frequencies.principal_preocupacion || []).map((item) => (
+                        {(analytics.frequencies?.principal_preocupacion || []).map((item) => (
                           <div key={item.value} className="space-y-1">
                             <div className="flex justify-between text-xs">
                               <span className="text-slate-700 font-medium truncate pr-2">{item.label}</span>
@@ -650,7 +661,7 @@ function doPost(e) {
                         Ecosistema de dispositivos en el hogar (Respuesta múltiple)
                       </h4>
                       <div className="space-y-2.5">
-                        {(analytics.frequencies.otros_dispositivos || []).map((item) => (
+                        {(analytics.frequencies?.otros_dispositivos || []).map((item) => (
                           <div key={item.value} className="space-y-1">
                             <div className="flex justify-between text-xs">
                               <span className="text-slate-700 font-medium truncate pr-2">{item.label}</span>
@@ -675,7 +686,7 @@ function doPost(e) {
                         Efectos físicos, posturales, visuales y manejo de la ira observados (Respuesta múltiple)
                       </h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
-                        {(analytics.frequencies.impacto_fisico_emocional || []).map((item) => (
+                        {(analytics.frequencies?.impacto_fisico_emocional || []).map((item) => (
                           <div key={item.value} className="space-y-1">
                             <div className="flex justify-between text-xs">
                               <span className="text-slate-700 font-medium truncate pr-2">{item.label}</span>
@@ -706,6 +717,7 @@ function doPost(e) {
                         </h4>
                       </div>
                       <button
+                        type="button"
                         onClick={handleCopyApa}
                         className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-slate-200 text-xs font-bold text-indigo-700 hover:bg-indigo-50 transition-colors"
                       >
@@ -731,13 +743,13 @@ function doPost(e) {
                   <div className="space-y-3">
                     <h4 className="font-heading font-extrabold text-base text-slate-900 flex items-center gap-2">
                       <MessageSquareQuote className="w-5 h-5 text-indigo-600" />
-                      <span>Relatos y preocupaciones abiertas de las familias ({analytics.qualitativeQuotes.length})</span>
+                      <span>Relatos y preocupaciones abiertas de las familias ({(analytics.qualitativeQuotes || []).length})</span>
                     </h4>
-                    {analytics.qualitativeQuotes.length === 0 ? (
+                    {(analytics.qualitativeQuotes || []).length === 0 ? (
                       <p className="text-xs text-slate-500 italic">No hay comentarios cualitativos en la selección actual.</p>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {analytics.qualitativeQuotes.map((q) => (
+                        {(analytics.qualitativeQuotes || []).map((q) => (
                           <div key={q.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                             <p className="text-xs sm:text-sm text-slate-800 italic">“{q.quote}”</p>
                             <div className="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
@@ -758,6 +770,7 @@ function doPost(e) {
                       </h4>
                       <div className="flex items-center gap-2">
                         <button
+                          type="button"
                           onClick={handleLoadSample}
                           className="text-xs font-bold text-indigo-600 hover:underline"
                         >
@@ -765,6 +778,7 @@ function doPost(e) {
                         </button>
                         {records.length > 0 && (
                           <button
+                            type="button"
                             onClick={handleClearAll}
                             className="inline-flex items-center gap-1 text-xs font-bold text-red-600 hover:underline ml-3"
                           >
@@ -818,6 +832,7 @@ function doPost(e) {
                               </td>
                               <td className="py-2.5 px-3 text-right">
                                 <button
+                                  type="button"
                                   onClick={() => handleDeleteRecord(r.id)}
                                   className="text-slate-400 hover:text-red-600 p-1"
                                   title="Eliminar este registro"
@@ -904,6 +919,7 @@ function doPost(e) {
 
                       <div className="grid grid-cols-1 gap-2.5">
                         <button
+                          type="button"
                           onClick={() => handleDownloadCSV(false)}
                           disabled={filteredRecords.length === 0}
                           className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white text-xs font-bold flex items-center justify-between transition-colors"
@@ -913,6 +929,7 @@ function doPost(e) {
                         </button>
 
                         <button
+                          type="button"
                           onClick={() => handleDownloadCSV(true)}
                           disabled={filteredRecords.length === 0}
                           className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white text-xs font-bold flex items-center justify-between transition-colors"
@@ -922,6 +939,7 @@ function doPost(e) {
                         </button>
 
                         <button
+                          type="button"
                           onClick={handleDownloadCodebook}
                           className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-between transition-colors"
                         >
@@ -932,6 +950,7 @@ function doPost(e) {
 
                       <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
                         <button
+                          type="button"
                           onClick={handleDownloadJSON}
                           disabled={filteredRecords.length === 0}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50"
