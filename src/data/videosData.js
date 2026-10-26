@@ -339,5 +339,16 @@ export const videosList = [
     badgeColor: "bg-indigo-100 text-indigo-800",
     description: "Guía pensada para disparar debates grupales en el aula sobre empatía digital, identidad en internet y convivencia.",
     discussionPrompt: "Para el docente: Utilizar como disparador en la hora de tutoría o informática para armar un decálogo de convivencia del grupo."
+  },
+  {
+    id: "los-celulares-escuchan",
+    title: "¿Los celulares realmente nos escuchan?",
+    subtitle: "Privacidad, algoritmos predictivos y huella digital en redes",
+    category: "Huella Digital",
+    target: "Familias, Docentes y Modo Taller",
+    videoSrc: `${base}videos/los-celulares-escuchan.mp4`,
+    badgeColor: "bg-purple-100 text-purple-800",
+    description: "Cápsula audiovisual para debatir si los celulares graban nuestras conversaciones o si el cruce de metadatos, la geolocalización compartida y los modelos predictivos son los verdaderos artífices de la publicidad hiperdirigida.",
+    discussionPrompt: "Pregunta disparadora para el taller: Cuando te aparece publicidad de algo de lo que apenas hablaste, ¿creés que el teléfono grabó tu voz o que los algoritmos cruzaron tus contactos, ubicaciones y hábitos para anticipar lo que ibas a querer?"
   }
 ];
