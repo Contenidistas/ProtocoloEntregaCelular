@@ -58,7 +58,7 @@ export default function ProfileSelectorModal({ userProfile, setUserProfile, isOp
                 )}
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Quiero acompañar a mi hijo/a con su primer celular, poner límites de descanso en casa y configurar los controles parentales.
+                Pautas esenciales y directas para el hogar. Incluye una <strong>Vista Esencial ultralimpia</strong> de 3 pasos y la opción de ver contenidos completos.
               </p>
               <div className="pt-2 flex items-center gap-1 text-[11px] font-bold text-indigo-700">
                 <span>Ir al modo familia</span>

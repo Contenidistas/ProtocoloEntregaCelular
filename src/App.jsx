@@ -13,14 +13,23 @@ import UruguayNormativeSection from './components/UruguayNormativeSection';
 import TeachersSection from './components/TeachersSection';
 import WorkshopMode from './components/WorkshopMode';
 import ResearcherDashboardModal from './components/ResearcherDashboardModal';
+import FamilyEssentialView from './components/FamilyEssentialView';
 import Footer from './components/Footer';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('inicio');
   const [userProfile, setUserProfile] = useState('familia'); // 'familia' | 'docente'
+  const [familyViewMode, setFamilyViewMode] = useState(() => {
+    return localStorage.getItem('primer_celular_vista_familia') || 'esencial'; // 'esencial' | 'completa'
+  });
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isWorkshopModeActive, setIsWorkshopModeActive] = useState(false);
   const [isResearcherModalOpen, setIsResearcherModalOpen] = useState(false);
+
+  const handleSetFamilyViewMode = (mode) => {
+    setFamilyViewMode(mode);
+    localStorage.setItem('primer_celular_vista_familia', mode);
+  };
 
   // Load saved profile or trigger modal on first visit
   useEffect(() => {
@@ -107,6 +116,8 @@ export default function App() {
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         userProfile={userProfile}
+        familyViewMode={familyViewMode}
+        onSetFamilyViewMode={handleSetFamilyViewMode}
         onOpenProfileSelector={() => setIsProfileModalOpen(true)}
       />
 
@@ -114,14 +125,23 @@ export default function App() {
       <main className="flex-1 pb-20 lg:pb-0">
         <div key={activeTab} className="page-transition-enter">
           {activeTab === 'inicio' && (
-            <div className="space-y-0">
-              <HeroSection 
-                setActiveTab={setActiveTab} 
-                userProfile={userProfile}
-                onOpenProfileSelector={() => setIsProfileModalOpen(true)}
+            userProfile === 'familia' && familyViewMode === 'esencial' ? (
+              <FamilyEssentialView 
+                onNavigateTab={setActiveTab}
+                onSwitchToCompleteView={() => handleSetFamilyViewMode('completa')}
               />
-              <SercModelSection />
-            </div>
+            ) : (
+              <div className="space-y-0">
+                <HeroSection 
+                  setActiveTab={setActiveTab} 
+                  userProfile={userProfile}
+                  familyViewMode={familyViewMode}
+                  onSetFamilyViewMode={handleSetFamilyViewMode}
+                  onOpenProfileSelector={() => setIsProfileModalOpen(true)}
+                />
+                <SercModelSection />
+              </div>
+            )
           )}
 
           {activeTab === 'controles' && (

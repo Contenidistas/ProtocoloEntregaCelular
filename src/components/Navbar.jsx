@@ -15,7 +15,14 @@ import {
   ChevronDown
 } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenProfileSelector }) {
+export default function Navbar({ 
+  activeTab, 
+  setActiveTab, 
+  userProfile, 
+  familyViewMode = 'esencial',
+  onSetFamilyViewMode,
+  onOpenProfileSelector 
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Streamlined navigation items per profile
@@ -71,28 +78,63 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
           </div>
 
           {/* Profile Switcher Button */}
-          <button
-            onClick={onOpenProfileSelector}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border transition-all ${
-              userProfile === 'familia'
-                ? 'bg-indigo-50 border-indigo-200 text-indigo-800 hover:bg-indigo-100'
-                : 'bg-purple-50 border-purple-200 text-purple-800 hover:bg-purple-100'
-            }`}
-            title="Toca para cambiar de perfil"
-          >
-            {userProfile === 'familia' ? (
-              <>
-                <Users className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Modo familia</span>
-              </>
-            ) : (
-              <>
-                <GraduationCap className="w-3.5 h-3.5 text-purple-700" />
-                <span>Modo docente</span>
-              </>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onOpenProfileSelector}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border transition-all ${
+                userProfile === 'familia'
+                  ? 'bg-indigo-50 border-indigo-200 text-indigo-800 hover:bg-indigo-100'
+                  : 'bg-purple-50 border-purple-200 text-purple-800 hover:bg-purple-100'
+              }`}
+              title="Toca para cambiar de perfil"
+            >
+              {userProfile === 'familia' ? (
+                <>
+                  <Users className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Modo familia</span>
+                </>
+              ) : (
+                <>
+                  <GraduationCap className="w-3.5 h-3.5 text-purple-700" />
+                  <span>Modo docente</span>
+                </>
+              )}
+              <ChevronDown className="w-3 h-3 opacity-60" />
+            </button>
+
+            {/* Toggle Vista Esencial / Vista Completa para Familias */}
+            {userProfile === 'familia' && onSetFamilyViewMode && (
+              <div className="hidden sm:flex items-center p-0.5 bg-slate-100 rounded-full border border-slate-200 text-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSetFamilyViewMode('esencial');
+                    setActiveTab('inicio');
+                  }}
+                  className={`px-3 py-1 rounded-full font-semibold transition-all cursor-pointer ${
+                    familyViewMode === 'esencial'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                  title="Vista simple y limpia (3 pasos)"
+                >
+                  🌿 Vista Esencial
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSetFamilyViewMode('completa')}
+                  className={`px-3 py-1 rounded-full font-semibold transition-all cursor-pointer ${
+                    familyViewMode === 'completa'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                  title="Vista completa con todos los módulos y videos"
+                >
+                  📚 Vista Completa
+                </button>
+              </div>
             )}
-            <ChevronDown className="w-3 h-3 opacity-60" />
-          </button>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1.5">
@@ -161,6 +203,40 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
               Cambiar a {userProfile === 'familia' ? 'docente' : 'familia'}
             </button>
           </div>
+
+          {/* Mobile Switcher Vista Esencial / Completa */}
+          {userProfile === 'familia' && onSetFamilyViewMode && (
+            <div className="p-2 mb-2 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs">
+              <span className="font-medium text-slate-600">Vista familias:</span>
+              <div className="flex items-center p-0.5 bg-slate-200/80 rounded-lg">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSetFamilyViewMode('esencial');
+                    setActiveTab('inicio');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`px-2.5 py-1 rounded-md font-semibold text-xs transition-all ${
+                    familyViewMode === 'esencial' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
+                  }`}
+                >
+                  🌿 Esencial
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSetFamilyViewMode('completa');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`px-2.5 py-1 rounded-md font-semibold text-xs transition-all ${
+                    familyViewMode === 'completa' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600'
+                  }`}
+                >
+                  📚 Completa
+                </button>
+              </div>
+            </div>
+          )}
 
           {currentNav.map((item) => {
             const Icon = item.icon;

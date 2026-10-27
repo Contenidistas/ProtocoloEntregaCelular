@@ -12,7 +12,13 @@ import {
   FileText
 } from 'lucide-react';
 
-export default function HeroSection({ setActiveTab, userProfile, onOpenProfileSelector }) {
+export default function HeroSection({ 
+  setActiveTab, 
+  userProfile, 
+  familyViewMode, 
+  onSetFamilyViewMode, 
+  onOpenProfileSelector 
+}) {
   return (
     <section className="relative overflow-hidden pt-6 pb-10 sm:pt-12 sm:pb-14 bg-gradient-to-b from-slate-50/80 via-white to-slate-50 border-b border-slate-200">
       
@@ -28,9 +34,18 @@ export default function HeroSection({ setActiveTab, userProfile, onOpenProfileSe
             onClick={onOpenProfileSelector}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium hover:bg-slate-200/70 border border-slate-200 transition-colors"
           >
-            <span>{userProfile === 'familia' ? 'Modo Familias' : 'Modo Docentes'}</span>
+            <span>{userProfile === 'familia' ? 'Modo Familias (Vista Completa)' : 'Modo Docentes'}</span>
             <span className="text-[11px] text-indigo-600 font-semibold underline">cambiar</span>
           </button>
+          {userProfile === 'familia' && onSetFamilyViewMode && (
+            <button
+              onClick={() => onSetFamilyViewMode('esencial')}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200 hover:bg-emerald-100 transition-colors cursor-pointer"
+              title="Volver a la versión simple y limpia de 3 pasos"
+            >
+              <span>🌿 Cambiar a Vista Esencial</span>
+            </button>
+          )}
         </div>
 
         {/* Clean, Human Title */}
