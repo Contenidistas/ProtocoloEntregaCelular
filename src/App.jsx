@@ -139,6 +139,7 @@ export default function App() {
           {/* Optional Tools & Anonymous Family Research Survey */}
           {(activeTab === 'encuesta' || activeTab === 'opcionales' || activeTab === 'protocolo' || activeTab === 'test') && (
             <OptionalToolsSection
+              userProfile={userProfile}
               initialTool={
                 activeTab === 'encuesta'
                   ? 'encuesta'

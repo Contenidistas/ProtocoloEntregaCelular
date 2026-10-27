@@ -40,62 +40,64 @@ export default function ParentalControlsSection() {
   const progressPercentage = Math.round((completedCount / allStepsList.length) * 100);
 
   return (
-    <section className="py-12 sm:py-16 bg-slate-50 border-b border-slate-200" id="controles-parentales">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-10 sm:py-16 bg-slate-50/60 border-b border-slate-200" id="controles-parentales">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-3">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            Guía técnica paso a paso
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Guía paso a paso</span>
           </div>
-          <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Controles parentales en Android e iPhone
+          <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Configuración técnica del celular
           </h2>
-          <p className="mt-3 text-slate-600 text-sm sm:text-base">
-            Configurar las restricciones no es espiar: es colocar barandas de seguridad en un balcón antes de que el niño salga a jugar. Elige el sistema operativo de tu familia y el grado de profundidad deseado.
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+            Configurar las restricciones no es espiar: es colocar barandas de seguridad. Elegí el sistema operativo del equipo y activá las pautas recomendadas.
           </p>
         </div>
 
         {/* Operating System Selector */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           
           <button
+            type="button"
             onClick={() => { setSelectedOS('android'); setExpandedStep(null); }}
-            className={`w-full sm:w-64 p-4 rounded-2xl border-2 flex items-center gap-3 transition-all ${
+            className={`w-full sm:w-60 p-3.5 rounded-2xl border flex items-center gap-3 transition-all cursor-pointer ${
               selectedOS === 'android'
-                ? 'border-emerald-600 bg-white shadow-md ring-2 ring-emerald-500/20'
-                : 'border-slate-200 bg-slate-100/70 hover:bg-white text-slate-600'
+                ? 'border-slate-900 bg-white shadow-xs'
+                : 'border-slate-200 bg-white hover:border-slate-300 text-slate-600'
             }`}
           >
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${
-              selectedOS === 'android' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-slate-200 text-slate-600'
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base ${
+              selectedOS === 'android' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'
             }`}>
               🤖
             </div>
             <div className="text-left">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Sistema</span>
-              <h4 className="font-heading font-extrabold text-base text-slate-900">Android</h4>
+              <span className="text-[10px] font-semibold text-slate-400 block">Sistema operativo</span>
+              <h4 className="font-heading font-bold text-sm text-slate-900">Android</h4>
               <p className="text-xs text-slate-500">Google Family Link</p>
             </div>
           </button>
 
           <button
+            type="button"
             onClick={() => { setSelectedOS('ios'); setExpandedStep(null); }}
-            className={`w-full sm:w-64 p-4 rounded-2xl border-2 flex items-center gap-3 transition-all ${
+            className={`w-full sm:w-60 p-3.5 rounded-2xl border flex items-center gap-3 transition-all cursor-pointer ${
               selectedOS === 'ios'
-                ? 'border-sky-600 bg-white shadow-md ring-2 ring-sky-500/20'
-                : 'border-slate-200 bg-slate-100/70 hover:bg-white text-slate-600'
+                ? 'border-slate-900 bg-white shadow-xs'
+                : 'border-slate-200 bg-white hover:border-slate-300 text-slate-600'
             }`}
           >
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${
-              selectedOS === 'ios' ? 'bg-slate-900 text-white shadow-sm' : 'bg-slate-200 text-slate-600'
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base ${
+              selectedOS === 'ios' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600'
             }`}>
               🍎
             </div>
             <div className="text-left">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Sistema</span>
-              <h4 className="font-heading font-extrabold text-base text-slate-900">iPhone / iPad</h4>
+              <span className="text-[10px] font-semibold text-slate-400 block">Sistema operativo</span>
+              <h4 className="font-heading font-bold text-sm text-slate-900">iPhone / iPad</h4>
               <p className="text-xs text-slate-500">Apple "En familia"</p>
             </div>
           </button>
@@ -103,35 +105,36 @@ export default function ParentalControlsSection() {
         </div>
 
         {/* Global Progress Bar for this OS */}
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl p-4 border border-slate-200 shadow-sm mb-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-xl mx-auto bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="space-y-1 w-full sm:w-2/3">
-            <div className="flex items-center justify-between text-xs font-bold text-slate-700">
-              <span>Progreso de configuración ({selectedOS === 'android' ? 'Android' : 'iOS'}):</span>
+            <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
+              <span>Progreso ({selectedOS === 'android' ? 'Android' : 'iOS'}):</span>
               <span className="text-indigo-600">{progressPercentage}%</span>
             </div>
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-emerald-500 to-indigo-600 rounded-full transition-all duration-300"
+                className="h-full bg-indigo-600 rounded-full transition-all duration-300"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
           </div>
-          <span className="text-xs text-slate-500 shrink-0 font-medium">
-            {completedCount} de {allStepsList.length} pasos completados
+          <span className="text-xs text-slate-500 shrink-0">
+            {completedCount} de {allStepsList.length} pasos
           </span>
         </div>
 
         {/* Depth Selector Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+        <div className="flex flex-wrap items-center justify-center gap-2">
           {currentOSData.depths.map((depth) => {
             const isSelected = selectedDepth === depth.id;
             return (
               <button
+                type="button"
                 key={depth.id}
                 onClick={() => { setSelectedDepth(depth.id); setExpandedStep(null); }}
-                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-slate-900 text-white shadow-md shadow-slate-900/10'
+                    ? 'bg-slate-900 text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300'
                 }`}
               >

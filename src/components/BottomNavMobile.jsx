@@ -7,7 +7,8 @@ import {
   PhoneCall,
   GraduationCap, 
   FolderDown, 
-  FileText
+  FileText,
+  BookOpen
 } from 'lucide-react';
 
 export default function BottomNavMobile({ activeTab, setActiveTab, userProfile }) {
@@ -15,8 +16,8 @@ export default function BottomNavMobile({ activeTab, setActiveTab, userProfile }
     { id: 'inicio', label: 'Inicio', icon: Home },
     { id: 'controles', label: 'Configurar', icon: Smartphone },
     { id: 'videos', label: 'Videos', icon: Video },
-    { id: 'encuesta', label: 'Encuesta', icon: Sparkles },
-    { id: 'uruguay', label: 'Ayuda', icon: PhoneCall },
+    { id: 'formacion', label: 'Bienestar', icon: BookOpen },
+    { id: 'encuesta', label: 'Acuerdo', icon: Sparkles },
   ];
 
   const teacherNav = [

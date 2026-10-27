@@ -20,12 +20,12 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
 
   // Streamlined navigation items per profile
   const familyItems = [
-    { id: 'inicio', label: 'Inicio y S.E.R.C.', icon: Shield },
-    { id: 'controles', label: 'Controles', icon: Smartphone },
+    { id: 'inicio', label: 'Inicio', icon: Shield },
+    { id: 'controles', label: 'Configuración', icon: Smartphone },
     { id: 'videos', label: 'Videos', icon: Video },
-    { id: 'formacion', label: 'Salud digital', icon: BookOpen },
-    { id: 'encuesta', label: 'Encuesta y acuerdo', icon: Sparkles },
-    { id: 'uruguay', label: 'Ayuda oficial', icon: Shield },
+    { id: 'formacion', label: 'Bienestar', icon: BookOpen },
+    { id: 'encuesta', label: 'Acuerdos y Encuesta', icon: Sparkles },
+    { id: 'uruguay', label: 'Ayuda oficial', icon: PhoneCall },
   ];
 
   const teacherItems = [
@@ -33,7 +33,7 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
     { id: 'docentes', label: 'En el aula', icon: GraduationCap },
     { id: 'documentos', label: 'Guías PDF', icon: FolderDown },
     { id: 'videos', label: 'Videos tutoría', icon: Video },
-    { id: 'encuesta', label: 'Encuesta y acuerdo', icon: FileText },
+    { id: 'encuesta', label: 'Acuerdo y Encuesta', icon: FileText },
     { id: 'uruguay', label: 'Normativa', icon: Shield },
   ];
 
@@ -106,25 +106,15 @@ export default function Navbar({ activeTab, setActiveTab, userProfile, onOpenPro
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center gap-1.5 rounded-xl font-bold transition-all ${
-                    isSurveyItem
-                      ? isActive
-                        ? 'px-4 py-2 text-xs sm:text-sm bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-300'
-                        : 'px-4 py-2 text-xs sm:text-sm bg-emerald-50 text-emerald-900 border border-emerald-300 hover:bg-emerald-100 shadow-xs'
-                      : isActive
-                        ? 'px-3 py-1.5 text-xs bg-slate-900 text-white shadow-xs'
-                        : 'px-3 py-1.5 text-xs text-slate-600 hover:text-indigo-600 hover:bg-slate-100'
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                    isActive
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-100'
                   }`}
                 >
                   <Icon
                     className={`w-4 h-4 ${
-                      isSurveyItem
-                        ? isActive
-                          ? 'text-white'
-                          : 'text-emerald-600'
-                        : isActive
-                          ? 'text-white'
-                          : 'text-slate-400'
+                      isActive ? 'text-white' : 'text-slate-400'
                     }`}
                   />
                   {item.label}

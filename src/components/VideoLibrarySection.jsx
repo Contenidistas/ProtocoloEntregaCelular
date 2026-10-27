@@ -9,40 +9,39 @@ export default function VideoLibrarySection() {
   const categories = [
     'Todos',
     'AGESIC Uruguay',
-    'El dilema de las redes',
-    'Neurociencia y salud',
-    'Crianza digital',
-    'Huella digital',
-    'Convivencia',
-    'Grooming',
-    'Sexting y ley',
-    'Prevención',
-    'Docentes y taller'
+    'Crianza y salud',
+    'Redes y algoritmos',
+    'Seguridad y grooming',
+    'Docentes y aula'
   ];
 
   const filteredVideos = activeCategory === 'Todos'
     ? videosList
     : activeCategory === 'AGESIC Uruguay'
     ? videosList.filter(v => v.isAgesic)
-    : activeCategory === 'El dilema de las redes'
-    ? videosList.filter(v => v.isSocialDilemma)
-    : videosList.filter(v => v.category.toLowerCase() === activeCategory.toLowerCase());
+    : activeCategory === 'Crianza y salud'
+    ? videosList.filter(v => v.category === 'Crianza digital' || v.category === 'Neurociencia y salud')
+    : activeCategory === 'Redes y algoritmos'
+    ? videosList.filter(v => v.isSocialDilemma || v.category === 'El dilema de las redes' || v.category === 'Huella digital')
+    : activeCategory === 'Seguridad y grooming'
+    ? videosList.filter(v => v.category === 'Grooming' || v.category === 'Sexting y ley' || v.category === 'Prevención')
+    : videosList.filter(v => v.category === 'Docentes y taller' || v.category === 'Convivencia');
 
   return (
-    <section className="py-8 sm:py-14 bg-slate-50 border-b border-slate-200" id="videoteca">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <section className="py-10 sm:py-16 bg-slate-50/60 border-b border-slate-200" id="videoteca">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
-        {/* Section Header - Mobile Friendly */}
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 text-xs font-bold uppercase tracking-wider">
-            <Video className="w-3.5 h-3.5 text-indigo-700" />
-            <span>Videoteca formativa y cortometrajes</span>
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs font-semibold text-slate-700">
+            <Video className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Videoteca formativa</span>
           </div>
-          <h2 className="font-heading text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Videos para mirar y charlar en familia o en clase
+          <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Videos para mirar y dialogar en familia
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl mx-auto">
-            El video es el mejor disparador para abrir una conversación sincera. No se trata de generar miedo, sino de ponerle pienso y reflexionar juntos sobre situaciones reales.
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+            Cortometrajes y cápsulas breves sobre redes, privacidad y convivencia para abrir la conversación sin alarmismos.
           </p>
         </div>
 

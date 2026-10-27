@@ -83,136 +83,103 @@ export default function SercModelSection() {
   const currentPillarData = pillars.find(p => p.id === activePillar);
 
   return (
-    <section className="py-8 sm:py-14 bg-white border-b border-slate-200" id="modelo-serc">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <section className="py-10 sm:py-16 bg-white border-b border-slate-200" id="modelo-serc">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5" />
-            Marco pedagógico de crianza
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Pautas de convivencia digital</span>
           </div>
-          <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-            El modelo <span className="text-indigo-600">S.E.R.C.</span> en el hogar
+          <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            El modelo <span className="text-indigo-600">S.E.R.C.</span> en casa
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Del Dr. Ruben Puentedura y sistematizado por el <strong>Prof. Esp. Santiago Hernández</strong> (Uruguay Educa DGES): 
-            cuatro pilares sencillos para acompañar a los chiquilines sin caer en la prohibición ni en el descuido.
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+            Cuatro pilares sencillos para acompañar a los chiquilines sin caer en la prohibición total ni en el descontrol:
           </p>
         </div>
 
-        {/* Visual SERC Grid (2 cols on mobile, 4 on desktop) */}
-        <div className="bg-slate-900 rounded-3xl p-5 sm:p-7 shadow-xl text-white overflow-hidden relative border border-slate-800 space-y-5">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        {/* Clean 4 Pillar Selector Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {pillars.map((pillar) => {
+            const isSelected = activePillar === pillar.id;
+            return (
+              <button
+                type="button"
+                key={pillar.id}
+                onClick={() => setActivePillar(pillar.id)}
+                className={`text-left rounded-2xl p-4 transition-all border cursor-pointer ${
+                  isSelected 
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-sm' 
+                    : 'bg-slate-50/70 text-slate-700 border-slate-200/90 hover:bg-slate-100/80 hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm ${
+                    isSelected ? 'bg-white text-slate-900' : `${pillar.color} text-white`
+                  }`}>
+                    {pillar.letter}
+                  </span>
+                  {isSelected && (
+                    <span className="text-[10px] font-semibold text-emerald-400 bg-slate-800 px-2 py-0.5 rounded-full">
+                      Activo
+                    </span>
+                  )}
+                </div>
+                <h4 className={`font-heading font-bold text-sm leading-snug ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                  {pillar.title}
+                </h4>
+                <p className={`text-[11px] leading-snug mt-1 line-clamp-2 ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
+                  {pillar.subtitle}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Selected Pillar Content Box */}
+        <div className="bg-slate-50/80 rounded-2xl border border-slate-200 p-5 sm:p-7 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
             <div>
-              <span className="text-[10px] uppercase tracking-widest text-indigo-400 font-bold">
-                Los 4 pilares del acompañamiento
-              </span>
-              <h3 className="font-heading text-lg sm:text-xl font-bold text-white">
-                Supervisión · Educación · Regulación · Comunicación
-              </h3>
+              <div className="flex items-center gap-2">
+                <span className={`w-6 h-6 rounded-lg ${currentPillarData.color} text-white text-xs font-bold flex items-center justify-center`}>
+                  {currentPillarData.letter}
+                </span>
+                <h3 className="font-heading text-lg sm:text-xl font-bold text-slate-900">
+                  {currentPillarData.title}
+                </h3>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">{currentPillarData.subtitle}</p>
             </div>
-            
+
             <button
+              type="button"
               onClick={() => setShowOriginalBanner(!showOriginalBanner)}
-              className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-xs transition-colors self-start sm:self-auto cursor-pointer"
             >
-              <ImageIcon className="w-3.5 h-3.5 text-sky-400" />
+              <ImageIcon className="w-3.5 h-3.5 text-indigo-600" />
               <span>{showOriginalBanner ? 'Ocultar afiche original' : 'Ver afiche original'}</span>
             </button>
           </div>
 
           {/* Original Banner toggle */}
           {showOriginalBanner && (
-            <div className="p-2 bg-slate-950 rounded-2xl border border-slate-700 animate-in fade-in duration-200">
+            <div className="p-3 bg-white rounded-xl border border-slate-200 animate-in fade-in duration-200">
               <img 
                 src={`${import.meta.env.BASE_URL}RESPOSABILIDAD.png`} 
                 alt="Infografía SERC original de Santiago Hernández y Ruben Puentedura" 
-                className="w-full max-h-96 object-contain rounded-xl mx-auto"
+                className="w-full max-h-80 object-contain rounded-lg mx-auto"
               />
             </div>
           )}
 
-          {/* 4 Interactive Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {pillars.map((pillar) => {
-              const isSelected = activePillar === pillar.id;
-              return (
-                <div
-                  key={pillar.id}
-                  onClick={() => setActivePillar(pillar.id)}
-                  className={`cursor-pointer rounded-2xl p-3.5 sm:p-4 transition-all relative border ${
-                    isSelected 
-                      ? 'bg-slate-800 border-white/50 shadow-md ring-1 ring-white/20' 
-                      : 'bg-slate-800/40 border-slate-700 hover:bg-slate-800/80'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-2">
-                    <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl ${pillar.color} flex items-center justify-center text-white font-black text-xl shadow-sm shrink-0`}>
-                      {pillar.letter}
-                    </div>
-                    <div>
-                      <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 block">Pilar</span>
-                      <h4 className="font-heading font-extrabold text-xs sm:text-sm tracking-wide text-white leading-none">
-                        {pillar.title}
-                      </h4>
-                    </div>
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-slate-300 leading-snug line-clamp-2">
-                    {pillar.subtitle}
-                  </p>
-                  {isSelected && (
-                    <div className="mt-2 flex items-center gap-1 text-[10px] font-bold text-sky-400">
-                      <span>Viendo pilar</span>
-                      <span>✓</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Deep Dive for Selected Pillar */}
-        <div className="bg-slate-50 rounded-3xl border border-slate-200 p-5 sm:p-7 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
-            <div className="flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-2xl ${currentPillarData.color} flex items-center justify-center text-white font-black text-2xl shadow-sm shrink-0`}>
-                {currentPillarData.letter}
-              </div>
-              <div>
-                <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Pilar activo</span>
-                <h3 className="font-heading text-lg sm:text-xl font-bold text-slate-900 leading-none">
-                  {currentPillarData.title}
-                </h3>
-                <p className="text-xs text-slate-600 mt-0.5">{currentPillarData.subtitle}</p>
-              </div>
-            </div>
-
-            {/* Quick switcher buttons */}
-            <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200 self-start sm:self-auto">
-              {pillars.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => setActivePillar(p.id)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
-                    activePillar === p.id 
-                      ? `${p.color} text-white shadow-xs` 
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {p.letter}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Practical tips */}
             <div className="lg:col-span-2 space-y-3">
-              <h4 className="text-xs uppercase tracking-wider font-extrabold text-slate-700 flex items-center gap-2">
+              <h4 className="text-xs uppercase tracking-wider font-bold text-slate-700 flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Pautas prácticas para la vida diaria</span>
+                <span>Pautas cotidianas para casa</span>
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {currentPillarData.practicalTips.map((tip, idx) => (
@@ -220,37 +187,37 @@ export default function SercModelSection() {
                     <span className="w-4 h-4 rounded-full bg-slate-100 text-slate-700 font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
-                    <p className="text-xs text-slate-700 leading-relaxed font-normal">{tip}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">{tip}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Local context card */}
-            <div className="bg-indigo-50/70 border border-indigo-100 rounded-2xl p-4 flex flex-col justify-between space-y-3">
+            <div className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col justify-between space-y-3 shadow-xs">
               <div>
-                <div className="flex items-center gap-1.5 text-indigo-900 font-bold text-xs uppercase tracking-wider mb-1.5">
-                  <ShieldCheck className="w-4 h-4 text-indigo-700 shrink-0" />
-                  <span>En Uruguay</span>
+                <div className="flex items-center gap-1.5 text-slate-900 font-bold text-xs uppercase tracking-wider mb-1.5">
+                  <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span>Enfoque en Uruguay</span>
                 </div>
-                <p className="text-xs text-indigo-950/80 leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   {currentPillarData.uruguayContext}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-indigo-200/60 flex items-center justify-between text-[10px] text-indigo-800 font-semibold">
-                <span>Portal Uruguay Educa</span>
-                <span>ANEP / DGES</span>
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                <span>Uruguay Educa</span>
+                <span>DGES / Ceibal</span>
               </div>
             </div>
           </div>
 
-          {/* Golden Rule from Prof. Esp. Santiago Hernández */}
-          <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-amber-50/80 p-3.5 rounded-2xl border border-amber-200 text-amber-950">
+          {/* Golden Rule */}
+          <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-amber-50/60 p-3.5 rounded-xl border border-amber-200/80 text-amber-950">
             <div className="flex items-start gap-2.5">
-              <AlertTriangle className="w-4 h-4 text-amber-800 shrink-0 mt-0.5" />
-              <p className="text-xs leading-relaxed">
-                <strong className="font-bold">Regla de oro:</strong> "Tu ejemplo es su mejor lección. Si los adultos no soltamos el celular durante la cena o cuando nos hablan, ningún control parental va a funcionar."
+              <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+              <p className="text-xs leading-relaxed text-amber-900">
+                <strong>Regla de oro:</strong> "Tu ejemplo es su mejor lección. Si los adultos no soltamos el celular durante la cena o cuando nos hablan, ningún control técnico va a funcionar."
               </p>
             </div>
             <a
