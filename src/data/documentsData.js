@@ -19,7 +19,7 @@ export const officialDocuments = [
     fileUrl: `${base}documentos/UNICEF-Ceibal-Pantallas-en-Casa.pdf`,
     category: "Familias",
     badge: "Imprescindible para Familias",
-    description: "Orientaciones fundamentales para acompañar a los chiquilines en el uso de pantallas sin caer en prohibiciones estériles, cuidando el vínculo y la salud emocional."
+    description: "Orientaciones fundamentales para acompañar a los hijos en el uso de pantallas sin caer en prohibiciones estériles, cuidando el vínculo y la salud emocional."
   },
   {
     id: "unesco-morduchowicz",

@@ -42,7 +42,7 @@ export const caseStudies = [
     badgeColor: "bg-red-100 text-red-800",
     situation: "Tu hija/hijo de 11 años juega con frecuencia en Roblox y chatea por Discord con alguien que asegura ser un chico de 12 años de la ciudad de Las Piedras (Canelones). Recientemente, este contacto le ofreció regalarle 'Robux' y una cuenta VIP a cambio de que le envíe fotos por chat privado 'para conocerse mejor' y le pidió que mantenga el secreto frente a sus padres.",
     dilemma: "¿Qué medidas tomas de inmediato?",
-    conversationStarter: "«Hiciste muy bien en contármelo, estoy orgulloso/a de vos. Vos no hiciste nada malo: en internet hay adultos que mienten sobre su edad para engañar a chiquilines. En casa nunca te vamos a retar ni a quitar el celular por pedirnos ayuda cuando algo te incomoda.»",
+    conversationStarter: "«Hiciste muy bien en contármelo, estoy orgulloso/a de vos. Vos no hiciste nada malo: en internet hay adultos que mienten sobre su edad para engañar a chicos. En casa nunca te vamos a retar ni a quitar el celular por pedirnos ayuda cuando algo te incomoda.»",
     options: [
       {
         id: "a",

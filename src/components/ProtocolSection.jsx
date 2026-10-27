@@ -289,7 +289,7 @@ Firma del/de la Docente: __________________   Firmas de Delegados/as y Grupo: __
                 Configurar antes
               </h4>
               <p className="text-[11px] sm:text-xs text-slate-600 leading-snug">
-                Poner Family Link o Tiempo de Uso, horario de apagado y sin tarjetas guardadas antes de que el chiquilín lo estrene.
+                Poner Family Link o Tiempo de Uso, horario de apagado y sin tarjetas guardadas antes de que tu hijo/a lo estrene.
               </p>
             </div>
 

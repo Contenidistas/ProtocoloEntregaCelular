@@ -748,7 +748,7 @@ export default function WorkshopMode({ onExit }) {
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                 <div className="md:col-span-7 bg-slate-900/90 border-2 border-indigo-500/40 rounded-3xl p-5 sm:p-6 shadow-xl space-y-2">
                   <p className="text-sm sm:text-base font-semibold text-slate-100 leading-snug italic">
-                    "El celular no es un juguete ni un chupete electrónico; es una plaza pública global. No soltamos a un chiquilín solo de noche en una plaza sin enseñarle antes cómo cuidarse y cómo volver a casa."
+                    "El celular no es un juguete ni un chupete electrónico; es una plaza pública global. No soltamos a un hijo solo de noche en una plaza sin enseñarle antes cómo cuidarse y cómo volver a casa."
                   </p>
                   <div className="pt-1 flex flex-wrap items-center justify-between gap-2">
                     <span className="text-xs text-indigo-300 font-bold block">
@@ -1142,7 +1142,7 @@ export default function WorkshopMode({ onExit }) {
                     6. Coherencia y ejemplo adulto
                   </h4>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    Los chiquilines aprenden por imitación. Si los adultos no soltamos el teléfono en casa, ningún discurso pedagógico tendrá credibilidad.
+                    Los hijos aprenden por imitación. Si los adultos no soltamos el teléfono en casa, ningún discurso pedagógico tendrá credibilidad.
                   </p>
                 </div>
 
@@ -1574,14 +1574,14 @@ export default function WorkshopMode({ onExit }) {
                 <p><strong>Meta pedagógica:</strong> Revelar los mecanismos del diseño persuasivo (*The Social Dilemma*).</p>
                 <p>• Explicá el truco del <em>pull-to-refresh</em>: es idéntico a bajar la palanca de una máquina tragamonedas.</p>
                 <p>• Preguntá: "¿Alguna vez sintieron la vibración fantasma en el bolsillo?".</p>
-                <p>• Conclusión clave: no es que los chiquilines no tengan fuerza de voluntad; es que compiten contra miles de ingenieros diseñando estímulos para retenerlos.</p>
+                <p>• Conclusión clave: no es que los hijos no tengan fuerza de voluntad; es que compiten contra miles de ingenieros diseñando estímulos para retenerlos.</p>
               </div>
             )}
 
             {currentSlide === 4 && (
               <div className="space-y-2">
                 <p><strong>Meta pedagógica:</strong> Desactivar el sufrimiento del FOMO y promover el JOMO.</p>
-                <p>• Hablá del grupo de WhatsApp del liceo a las 23:30 hs: los chiquilines no duermen por terror a quedar excluidos.</p>
+                <p>• Hablá del grupo de WhatsApp del liceo a las 23:30 hs: los hijos no duermen por terror a quedar excluidos.</p>
                 <p>• Mostrá cómo las redes muestran "el backstage de mi vida contra la película editada del otro" y cómo esto dispara procesos de angustia.</p>
                 <p>• Promover el JOMO: la alegría de no estar en todos lados y la libertad de disfrutar la vida real.</p>
               </div>

@@ -108,7 +108,7 @@ export const doNotDisturbProfiles = [
     id: 'modo-estudio',
     title: '2. Perfil "Estudio / Trabajo sin distracciones"',
     badge: 'Para recuperar la atención profunda',
-    summary: 'Ideal tanto para cuando los chiquilines hacen los deberes o preparan un escrito como para cuando los adultos trabajan.',
+    summary: 'Ideal tanto para cuando los hijos hacen los deberes o preparan un escrito como para cuando los adultos trabajan.',
     features: [
       'Oculta y pausa temporalmente las aplicaciones distractoras (Instagram, TikTok, juegos) mientras sigue permitiendo usar la calculadora, el diccionario o CREA.',
       'Evita el "costo de cambio cognitivo": cada vez que miramos un mensaje mientras estudiamos, perdemos hasta 20 minutos de concentración real.',

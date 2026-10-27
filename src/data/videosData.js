@@ -14,7 +14,7 @@ export const videosList = [
     videoSrc: "",
     badgeColor: "bg-amber-100 text-amber-800",
     description: "La psiquiatra Marián Rojas Estapé analiza por qué estamos ante la primera generación en riesgo de atrofiar funciones ejecutivas clave (corteza prefrontal, memoria, paciencia y enfoque) a causa del estímulo continuo de las pantallas.",
-    discussionPrompt: "Pregunta disparadora: El principio 'úsalo o piérdelo'. Si no dejamos que los chiquilines se aburran de vez en cuando, ¿cómo van a desarrollar la creatividad y la tolerancia a la frustración?"
+    discussionPrompt: "Pregunta disparadora: El principio 'úsalo o piérdelo'. Si no dejamos que los hijos se aburran de vez en cuando, ¿cómo van a desarrollar la creatividad y la tolerancia a la frustración?"
   },
   {
     id: "dilema-redes-cual-es-el-problema",
@@ -118,7 +118,7 @@ export const videosList = [
     subtitle: "Cómo se construye nuestra identidad y reputación en internet",
     category: "Huella Digital",
     isAgesic: true,
-    target: "Chiquilines (+9 años), Familias y Docentes",
+    target: "Hijos (+9 años), Familias y Docentes",
     isYouTube: true,
     youtubeId: "Pstr8-BL4QM",
     youtubeUrl: "https://www.youtube.com/watch?v=Pstr8-BL4QM",
@@ -198,7 +198,7 @@ export const videosList = [
     subtitle: "El primer escudo para proteger el celular y las cuentas",
     category: "Crianza Digital",
     isAgesic: true,
-    target: "Familias y Chiquilines",
+    target: "Familias e Hijos",
     isYouTube: true,
     youtubeId: "HawIPNmkLjo",
     youtubeUrl: "https://www.youtube.com/watch?v=HawIPNmkLjo",
@@ -229,7 +229,7 @@ export const videosList = [
     title: "Comenzó a seguirte",
     subtitle: "Cortometraje sobre Grooming y perfiles falsos",
     category: "Grooming",
-    target: "Familias y Chiquilines (+10 años)",
+    target: "Familias e Hijos (+10 años)",
     videoSrc: `${base}videos/grooming-comenzo-a-seguirte.mp4`,
     badgeColor: "bg-red-100 text-red-800",
     description: "Muestra cómo un adulto crea una identidad falsa fingiendo ser un adolescente para ganarse la confianza de una joven a través de juegos y redes sociales.",

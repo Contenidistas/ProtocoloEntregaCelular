@@ -22,7 +22,7 @@ export default function SercModelSection() {
         "Supervisar de frente y a la luz del día, sin caer en el espionaje a escondidas: la regla se conversa.",
         "Configurar que cualquier descarga o compra requiera la huella o clave de mamá, papá o tutor."
       ],
-      uruguayContext: "En el marco del Código de la Niñez y la Adolescencia (Uruguay), los adultos tenemos el deber de cuidar y orientar a los chiquilines. Supervisar su celular no es desconfiar: es poner barandas para que no se caigan."
+      uruguayContext: "En el marco del Código de la Niñez y la Adolescencia (Uruguay), los adultos tenemos el deber de cuidar y orientar a los hijos. Supervisar su celular no es desconfiar: es poner barandas para que no se caigan."
     },
     {
       id: 'E',
@@ -35,7 +35,7 @@ export default function SercModelSection() {
       textColor: 'text-purple-600',
       icon: BookOpen,
       practicalTips: [
-        "Enseñar con el ejemplo: los gurises aprenden más de lo que nos ven hacer que de los sermones.",
+        "Enseñar con el ejemplo: los hijos aprenden más de lo que nos ven hacer que de los sermones.",
         "Cero celulares en la mesa durante el almuerzo y la cena familiar: charla cara a cara.",
         "Explicarles qué es la huella digital: lo que se sube a internet o a un estado de WhatsApp ya no se borra tan fácil.",
         "Aprender juntos sobre los juegos de moda (Roblox, Brawl Stars, TikTok) en vez de prohibir a ciegas."
@@ -58,7 +58,7 @@ export default function SercModelSection() {
         "Regla de oro de la casa: los celulares duermen cargándose en el living o la cocina, nunca en la mesa de luz del dormitorio.",
         "Cuidar momentos libres de pantallas para disfrutar de una salida, el club o una charla en familia."
       ],
-      uruguayContext: "La Sociedad Uruguaya de Pediatría (SUP) insiste en apagar pantallas al menos 1 hora antes de acostarse para no alterar la melatonina y el sueño profundo que los gurises precisan para rendir al otro día."
+      uruguayContext: "La Sociedad Uruguaya de Pediatría (SUP) insiste en apagar pantallas al menos 1 hora antes de acostarse para no alterar la melatonina y el sueño profundo que los hijos precisan para rendir al otro día."
     },
     {
       id: 'C',
@@ -76,7 +76,7 @@ export default function SercModelSection() {
         "Recordar que las redes sociales exigen un mínimo de 14 años y charlar en casa el porqué de esa regla.",
         "Decirles seguido: 'Si alguien te pide fotos, te incomoda o te asusta, vení a contarnos que te vamos a apoyar sin juzgarte'."
       ],
-      uruguayContext: "La confianza en la familia es la barrera más efectiva contra el grooming y el ciberbullying. Si el chiquilín teme que le saquen el celular, oculta el problema hasta que escala."
+      uruguayContext: "La confianza en la familia es la barrera más efectiva contra el grooming y el ciberbullying. Si el hijo teme que le saquen el celular, oculta el problema hasta que escala."
     }
   ];
 
@@ -96,7 +96,7 @@ export default function SercModelSection() {
             El modelo <span className="text-indigo-600">S.E.R.C.</span> en casa
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-            Cuatro pilares sencillos para acompañar a los chiquilines sin caer en la prohibición total ni en el descontrol:
+            Cuatro pilares sencillos para acompañar a los hijos sin caer en la prohibición total ni en el descontrol:
           </p>
         </div>
 

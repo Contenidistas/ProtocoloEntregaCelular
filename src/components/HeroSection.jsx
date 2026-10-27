@@ -38,7 +38,7 @@ export default function HeroSection({ setActiveTab, userProfile, onOpenProfileSe
           <h1 className="font-heading text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-snug">
             {userProfile === 'familia' ? (
               <>
-                Acompañar a los chiquilines con su{' '}
+                Acompañar a los hijos con su{' '}
                 <span className="text-indigo-600">primer celular</span>
               </>
             ) : (
@@ -204,7 +204,7 @@ export default function HeroSection({ setActiveTab, userProfile, onOpenProfileSe
                 <Video className="w-5 h-5" />
               </div>
               <h3 className="font-heading font-bold text-sm text-slate-900">Videos de Tutoría</h3>
-              <p className="text-[11px] text-slate-500 mt-1">Para debatir con los chiquilines.</p>
+              <p className="text-[11px] text-slate-500 mt-1">Para debatir con los estudiantes.</p>
             </div>
 
             <div 
