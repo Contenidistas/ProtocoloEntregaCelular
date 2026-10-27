@@ -98,6 +98,8 @@ export default function App() {
       <ProfileSelectorModal
         userProfile={userProfile}
         setUserProfile={setUserProfile}
+        familyViewMode={familyViewMode}
+        onSetFamilyViewMode={handleSetFamilyViewMode}
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
         onOpenWorkshopMode={() => setIsWorkshopModeActive(true)}
